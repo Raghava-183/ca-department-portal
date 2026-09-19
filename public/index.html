@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Computer Applications — Department Portal</title>
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap" rel="stylesheet">
+<style>
+/* =========================================================
+   To change the tiles, scroll to the bottom of this file.
+   The list is clearly marked. Nothing up here needs editing.
+   ========================================================= */
+
+:root{
+  --navy:#09266A;          /* sampled from the department banner */
+  --navy-deep:#051840;
+  --navy-bright:#0F3E9E;
+  --gold:#D9A227;
+  --gold-deep:#B0821A;
+  --gold-wash:#FBF3DF;
+  --paper:#F3F6FB;
+  --white:#FFFFFF;
+  --line:#DCE4EF;
+  --ink:#0B1B33;
+  --muted:#5A6B84;
+}
+
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;}
+body{
+  font-family:'Archivo',system-ui,sans-serif;
+  background:var(--paper);color:var(--ink);
+  -webkit-font-smoothing:antialiased;
+}
+button{font:inherit;cursor:pointer;}
+[hidden]{display:none !important;}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
+
+/* ---------------- banner ---------------- */
+.banner-wrap{width:100%;background:#fff;line-height:0;}
+.banner-wrap img{width:100%;height:auto;display:block;}
+.gold-rule{height:3px;background:linear-gradient(90deg,var(--gold-deep),var(--gold) 35%,var(--gold) 65%,var(--gold-deep));}
+
+/* ---------------- sign in ---------------- */
+#gate{
+  position:fixed;inset:0;z-index:100;
+  background:
+    radial-gradient(1100px 420px at 50% -10%, rgba(217,162,39,.18), transparent 70%),
+    linear-gradient(165deg,var(--navy) 0%,var(--navy-deep) 100%);
+  display:flex;flex-direction:column;overflow:auto;
+}
+.gate-body{flex:1;display:flex;align-items:center;justify-content:center;padding:40px 24px;}
+.gate-card{
+  width:100%;max-width:382px;background:var(--white);
+  border-radius:9px;padding:32px 30px 28px;
+  border-top:4px solid var(--gold);
+  box-shadow:0 18px 48px rgba(3,14,40,.32);
+}
+.gate-card h1{font-family:'Newsreader',Georgia,serif;font-size:25px;font-weight:400;color:var(--navy);}
+.gate-card .hint{margin-top:7px;font-size:13.5px;line-height:1.55;color:var(--muted);}
+label.field{display:block;font-size:13px;font-weight:600;color:var(--navy);margin:24px 0 7px;}
+#pw{
+  width:100%;padding:12px 13px;font-size:15px;
+  border:1px solid var(--line);border-radius:5px;background:var(--paper);color:var(--ink);
+}
+#pw:focus{border-color:var(--navy-bright);background:#fff;}
+#signin{
+  width:100%;margin-top:13px;padding:12px;
+  background:var(--navy);color:#fff;border:0;border-radius:5px;font-weight:600;font-size:15px;
+}
+#signin:hover{background:var(--navy-bright);}
+#signin:disabled{opacity:.6;cursor:default;}
+#gate-msg{min-height:20px;margin-top:11px;font-size:13.5px;color:#B3261E;}
+
+/* ---------------- shell ---------------- */
+#shell{display:none;flex-direction:column;height:100%;}
+#shell.on{display:flex;}
+header{flex:none;}
+
+.hero{
+  flex:none;
+  background:linear-gradient(112deg,var(--navy) 0%,var(--navy-deep) 100%);
+  color:#fff;
+}
+.wrap{max-width:1180px;margin:0 auto;padding:0 22px;}
+
+.bar{display:flex;align-items:center;gap:13px;height:54px;}
+#crumb{font-size:14.5px;font-weight:600;color:#fff;}
+.bar .spacer{flex:1;}
+.tb-btn{
+  background:transparent;border:1px solid rgba(255,255,255,.3);color:#fff;
+  padding:7px 13px;border-radius:5px;font-size:13px;font-weight:500;
+  display:inline-flex;align-items:center;gap:7px;
+}
+.tb-btn:hover{border-color:var(--gold);color:var(--gold);background:rgba(255,255,255,.05);}
+.tb-btn svg{display:block;}
+
+.hero-text{padding:6px 0 30px;}
+.hero-text h2{font-family:'Newsreader',Georgia,serif;font-size:30px;font-weight:400;line-height:1.2;}
+.hero-text p{margin-top:8px;font-size:14.5px;line-height:1.6;color:rgba(255,255,255,.72);max-width:56ch;}
+
+/* ---------------- grid ---------------- */
+#grid-view{flex:1;overflow-y:auto;display:none;flex-direction:column;}
+#grid-view.on{display:flex;}
+.grid-body{flex:1;padding:32px 0 56px;}
+
+.group-head{display:flex;align-items:center;gap:12px;margin:0 0 15px;}
+.group-head:not(:first-child){margin-top:34px;}
+.group-head .dot{width:9px;height:9px;background:var(--gold);flex:none;transform:rotate(45deg);}
+.group-head h3{font-size:14px;font-weight:700;color:var(--navy);}
+.group-head .bar-line{flex:1;height:1px;background:var(--line);}
+
+.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(248px,1fr));}
+.tile{
+  position:relative;overflow:hidden;text-align:left;
+  background:var(--white);border:1px solid var(--line);border-radius:8px;
+  padding:20px 18px 18px;display:flex;flex-direction:column;gap:11px;min-height:160px;
+  transition:border-color .12s ease, box-shadow .12s ease;
+}
+.tile::after{                     /* angled corner, echoing the banner's cut edges */
+  content:"";position:absolute;top:0;right:0;width:46px;height:46px;
+  background:var(--gold);clip-path:polygon(100% 0,100% 100%,0 0);
+}
+.tile:hover{border-color:var(--navy-bright);box-shadow:0 6px 18px rgba(9,38,106,.12);}
+.tile:hover::after{background:var(--navy-bright);}
+.tile .ico{
+  width:38px;height:38px;border-radius:7px;background:var(--navy);color:#fff;
+  display:flex;align-items:center;justify-content:center;flex:none;
+}
+.tile .nm{font-size:16px;font-weight:600;color:var(--navy);line-height:1.3;padding-right:34px;}
+.tile .ds{font-size:13px;line-height:1.55;color:var(--muted);flex:1;}
+
+footer{
+  flex:none;background:var(--navy-deep);color:rgba(255,255,255,.62);
+  font-size:12.5px;line-height:1.6;
+}
+footer .wrap{padding-top:16px;padding-bottom:18px;
+  display:flex;flex-wrap:wrap;gap:6px 18px;justify-content:space-between;}
+footer strong{color:rgba(255,255,255,.85);font-weight:600;}
+
+/* ---------------- app view ---------------- */
+#app-view{flex:1;position:relative;min-height:0;display:none;}
+#app-view.on{display:block;}
+#frame{width:100%;height:100%;border:0;background:#fff;display:none;}
+#frame.on{display:block;}
+
+.overlay{
+  position:absolute;inset:0;display:none;align-items:center;justify-content:center;
+  padding:30px;background:var(--paper);
+}
+.overlay.on{display:flex;}
+.overlay .box{max-width:460px;text-align:center;}
+.overlay h4{font-family:'Newsreader',Georgia,serif;font-size:22px;font-weight:400;color:var(--navy);margin-bottom:10px;}
+.overlay p{font-size:14px;line-height:1.65;color:var(--muted);}
+.overlay .addr{
+  display:block;margin:14px 0;padding:9px 12px;background:var(--white);
+  border:1px solid var(--line);border-radius:5px;
+  font-family:ui-monospace,Consolas,monospace;font-size:12.5px;color:var(--ink);
+  word-break:break-all;
+}
+.overlay .acts{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:6px;}
+.overlay .primary{background:var(--navy);color:#fff;border:0;padding:11px 20px;border-radius:5px;font-size:14px;font-weight:500;}
+.overlay .primary:hover{background:var(--navy-bright);}
+.overlay .ghost{background:var(--white);color:var(--navy);border:1px solid var(--line);padding:11px 18px;border-radius:5px;font-size:14px;font-weight:500;}
+.overlay .ghost:hover{border-color:var(--gold);background:var(--gold-wash);}
+.spinner{
+  width:28px;height:28px;border:2px solid var(--line);border-top-color:var(--gold);
+  border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 14px;
+}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* ---------------- small screens ---------------- */
+@media (max-width:760px){
+  .banner-wrap{height:64px;overflow:hidden;}
+  .banner-wrap img{height:64px;width:100%;object-fit:cover;object-position:center;}
+  .wrap{padding:0 16px;}
+  .hero-text{padding:2px 0 24px;}
+  .hero-text h2{font-size:23px;}
+  .grid-body{padding:24px 0 44px;}
+  .grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;}
+  .tile{padding:15px 14px 14px;min-height:144px;gap:9px;}
+  .tile::after{width:34px;height:34px;}
+  .tile .ico{width:32px;height:32px;}
+  .tile .nm{font-size:14.5px;padding-right:22px;}
+  .tile .ds{font-size:12px;line-height:1.5;}
+  #crumb{max-width:38vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .tb-btn svg + span{display:none;}
+  .tb-btn{padding:8px 11px;}
+  footer .wrap{flex-direction:column;}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms !important;transition-duration:.01ms !important;}
+}
+</style>
+</head>
+<body>
+
+<!-- ================= SIGN IN ================= -->
+<div id="gate">
+  <div class="banner-wrap"><img src="banner.png" alt="Department of Computer Applications, Vignan's Foundation for Science, Technology and Research, School of Computing and Informatics"></div>
+  <div class="gold-rule"></div>
+  <div class="gate-body">
+    <div class="gate-card">
+      <h1>Department Portal</h1>
+      <p class="hint">Sign in with the department password to reach the department's systems.</p>
+      <label class="field" for="pw">Department password</label>
+      <input id="pw" type="password" autocomplete="current-password" autofocus>
+      <button id="signin">Sign in</button>
+      <div id="gate-msg" role="status"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= SHELL ================= -->
+<div id="shell">
+  <header>
+    <div class="banner-wrap"><img src="banner.png" alt="Department of Computer Applications, Vignan's Foundation for Science, Technology and Research, School of Computing and Informatics"></div>
+    <div class="gold-rule"></div>
+  </header>
+
+  <div class="hero">
+    <div class="wrap">
+      <div class="bar">
+        <button class="tb-btn" id="back" hidden>
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3L5 8l5 5"/></svg>
+          <span>All systems</span>
+        </button>
+        <span id="crumb">All systems</span>
+        <span class="spacer"></span>
+        <button class="tb-btn" id="signout"><span>Sign out</span></button>
+      </div>
+      <div class="hero-text" id="hero-text">
+        <h2>Department systems</h2>
+        <p>Select a system to open it here. Each one keeps its own records and its own login.</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="grid-view">
+    <div class="grid-body"><div class="wrap"><div id="groups"></div></div></div>
+    <footer>
+      <div class="wrap">
+        <span><strong>Department of Computer Applications</strong> · School of Computing &amp; Informatics</span>
+        <span>Vignan's Foundation for Science, Technology &amp; Research</span>
+      </div>
+    </footer>
+  </div>
+
+  <div id="app-view">
+    <iframe id="frame" title="Department system" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    <div class="overlay" id="loading"><div class="box"><div class="spinner"></div><p>Opening…</p></div></div>
+    <div class="overlay" id="failed">
+      <div class="box">
+        <h4 id="fail-title">This system didn't open</h4>
+        <p id="fail-msg">The address didn't respond.</p>
+        <code class="addr" id="fail-addr"></code>
+        <div class="acts">
+          <button class="primary" id="fail-retry">Try again</button>
+          <button class="ghost" id="fail-direct">Check the address</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ==========================================================================
+   THE TILES — the only part you normally edit.
+
+   id      short unique name, no spaces
+   name    the tile heading
+   group   heading it sits under (tiles sharing a group sit together)
+   desc    the sentence on the tile
+   url     the live address, no trailing slash needed
+   icon    calendar | audit | chart | award | students | schedule |
+           report | folder | book | globe
+   ========================================================================== */
+
+const APPS = [
+  {
+    id:"calendar", name:"Activity Calendar", group:"Planning and records",
+    desc:"Semester-wise activity calendar with a proof link stored against every event.",
+    url:"https://ca-activity-calendar.vercel.app/",
+    icon:"calendar"
+  },
+  {
+    id:"audit", name:"Academic Audit", group:"Planning and records",
+    desc:"Internal academic audit record, with supporting documents attached section by section.",
+    url:"https://raghava-183.github.io/mca-academic-audit/",
+    icon:"audit"
+  },
+  {
+    id:"scorecard", name:"HoD Scorecard", group:"Planning and records",
+    desc:"All 114 metrics scored across the Beginning to Exemplary bands.",
+    url:"https://vfstr-hod-scorecard.vercel.app/",
+    icon:"chart"
+  },
+  {
+    id:"achievements", name:"Achievements Portal", group:"Students",
+    desc:"Students upload and categorise certificates; faculty search any record by registration number.",
+    url:"https://ca-achievements-portal-df3e.vercel.app",
+    icon:"award"
+  },
+  {
+    id:"augmented", name:"Augmented Learning", group:"Students",
+    desc:"Identifies slow and advanced learners from the module marks and builds the subject-wise lists.",
+    url:"https://tallamvyshnavi.github.io/augmented-learning/",
+    icon:"students"
+  }
+];
+
+/* ======================= nothing below needs editing ====================== */
+
+const ICONS = {
+  calendar:'<path d="M3 5h14v12H3zM3 9h14M7 3v3M13 3v3"/>',
+  audit:'<path d="M6 3h8v14H6zM9 3h2M7.5 8.5l1.2 1.2L12 6.5M7.5 13h5"/>',
+  chart:'<path d="M3 17V8M8 17V4M13 17v-6M18 17V9"/>',
+  award:'<path d="M10 3a4.5 4.5 0 100 9 4.5 4.5 0 000-9zM7 11.5L6 18l4-2 4 2-1-6.5"/>',
+  students:'<path d="M10 3L2 7l8 4 8-4-8-4zM5 9v4c0 1.4 2.2 2.5 5 2.5s5-1.1 5-2.5V9"/>',
+  schedule:'<path d="M10 3a7 7 0 100 14 7 7 0 000-14zM10 6v4l3 2"/>',
+  report:'<path d="M5 3h7l3 3v11H5zM12 3v3h3M7.5 10h5M7.5 13h5"/>',
+  folder:'<path d="M3 6h5l1.5 2H17v8H3z"/>',
+  book:'<path d="M4 4h5a2 2 0 012 2v10a2 2 0 00-2-2H4zM16 4h-5a2 2 0 00-2 2v10a2 2 0 012-2h5z"/>',
+  globe:'<path d="M10 3a7 7 0 100 14 7 7 0 000-14zM3 10h14M10 3c2 2.2 2 11.8 0 14M10 3c-2 2.2-2 11.8 0 14"/>'
+};
+const iconSvg = k => '<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" '
+  + 'stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">'
+  + (ICONS[k] || '<circle cx="10" cy="10" r="3.2"/>') + '</svg>';
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+const $ = s => document.querySelector(s);
+const gate=$("#gate"), shell=$("#shell"), frame=$("#frame");
+const gridView=$("#grid-view"), appView=$("#app-view"), heroText=$("#hero-text");
+const loading=$("#loading"), failed=$("#failed");
+const crumb=$("#crumb"), back=$("#back");
+let watchdog=null, currentApp=null;
+
+/* ---- sign in ---- */
+async function signIn(){
+  const btn=$("#signin"), msg=$("#gate-msg"), val=$("#pw").value;
+  if(!val){ msg.textContent="Enter the department password."; return; }
+  btn.disabled=true; btn.textContent="Checking…"; msg.textContent="";
+  try{
+    const r=await fetch("/api/login",{
+      method:"POST", headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({password:val})
+    });
+    const d=await r.json().catch(()=>({}));
+    if(r.ok && d.ok){ sessionStorage.setItem("ca_portal","1"); start(); return; }
+    msg.textContent = d.error || "That password didn't work. Try again.";
+  }catch(e){
+    msg.textContent="Couldn't reach the server. Check your connection and try again.";
+  }
+  btn.disabled=false; btn.textContent="Sign in"; $("#pw").select();
+}
+$("#signin").addEventListener("click", signIn);
+$("#pw").addEventListener("keydown", e=>{ if(e.key==="Enter") signIn(); });
+$("#signout").addEventListener("click", ()=>{
+  sessionStorage.removeItem("ca_portal"); location.reload();
+});
+
+/* ---- build the grid ---- */
+function buildGrid(){
+  const host=$("#groups"); host.innerHTML="";
+  const order=[], byGroup={};
+  APPS.forEach(a=>{
+    const g=a.group || "Department systems";
+    if(!byGroup[g]){ byGroup[g]=[]; order.push(g); }
+    byGroup[g].push(a);
+  });
+  const single = order.length===1;
+
+  order.forEach(g=>{
+    if(!single){
+      const h=document.createElement("div");
+      h.className="group-head";
+      h.innerHTML='<span class="dot"></span><h3>'+esc(g)+'</h3><span class="bar-line"></span>';
+      host.appendChild(h);
+    }
+    const grid=document.createElement("div");
+    grid.className="grid";
+    byGroup[g].forEach(a=>{
+      const t=document.createElement("button");
+      t.className="tile"; t.dataset.id=a.id;
+      t.innerHTML='<span class="ico">'+iconSvg(a.icon)+'</span>'
+                 +'<span class="nm">'+esc(a.name)+'</span>'
+                 +'<span class="ds">'+esc(a.desc||"")+'</span>';
+      grid.appendChild(t);
+    });
+    host.appendChild(grid);
+  });
+
+  host.addEventListener("click", e=>{
+    const t=e.target.closest(".tile");
+    if(t) openApp(t.dataset.id);
+  });
+}
+
+/* ---- open a system, in place ---- */
+function openApp(id){
+  const app=APPS.find(a=>a.id===id);
+  if(!app) return;
+  currentApp=app;
+  clearTimeout(watchdog);
+  gridView.classList.remove("on");
+  appView.classList.add("on");
+  heroText.hidden=true;
+  failed.classList.remove("on");
+  crumb.textContent=app.name;
+  back.hidden=false;
+  history.replaceState(null,"","#"+app.id);
+
+  if(!/^https?:\/\//i.test(app.url)){
+    showFail(app,"No address set yet",
+      "This tile still has a placeholder instead of a web address. Open index.html and paste the live address into this tile.");
+    return;
+  }
+
+  loading.classList.add("on");
+  frame.classList.add("on");
+  frame.src=app.url;
+  watchdog=setTimeout(()=>{
+    if(loading.classList.contains("on")) showFail(app,"This system is taking too long",
+      "It may be waking up from sleep, or the address may be wrong. Give it another try.");
+  }, 12000);
+}
+
+function showGrid(){
+  clearTimeout(watchdog);
+  appView.classList.remove("on");
+  loading.classList.remove("on");
+  failed.classList.remove("on");
+  frame.classList.remove("on"); frame.removeAttribute("src");
+  gridView.classList.add("on");
+  heroText.hidden=false;
+  crumb.textContent="All systems";
+  back.hidden=true;
+  history.replaceState(null,"","#");
+}
+back.addEventListener("click", showGrid);
+document.querySelectorAll("#shell .banner-wrap img").forEach(img=>{
+  img.style.cursor="pointer";
+  img.addEventListener("click", showGrid);
+});
+document.addEventListener("keydown", e=>{
+  if(e.key==="Escape" && appView.classList.contains("on")) showGrid();
+});
+
+frame.addEventListener("load", ()=>{ clearTimeout(watchdog); loading.classList.remove("on"); });
+
+function showFail(app,title,msg){
+  clearTimeout(watchdog);
+  loading.classList.remove("on");
+  frame.classList.remove("on"); frame.removeAttribute("src");
+  $("#fail-title").textContent = title;
+  $("#fail-msg").textContent = msg;
+  $("#fail-addr").textContent = app.url;
+  $("#fail-direct").hidden = !/^https?:\/\//i.test(app.url);
+  failed.classList.add("on");
+}
+$("#fail-retry").addEventListener("click", ()=>{ if(currentApp) openApp(currentApp.id); });
+$("#fail-direct").addEventListener("click", ()=>{
+  if(currentApp && /^https?:\/\//i.test(currentApp.url)) window.open(currentApp.url,"_blank","noopener");
+});
+
+/* ---- go ---- */
+function start(){
+  gate.style.display="none";
+  shell.classList.add("on");
+  if(!$("#groups").children.length) buildGrid();
+  const want=location.hash.replace("#","");
+  if(want && APPS.some(a=>a.id===want)) openApp(want); else showGrid();
+}
+if(sessionStorage.getItem("ca_portal")==="1") start();
+</script>
+</body>
+</html>
