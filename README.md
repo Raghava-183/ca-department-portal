@@ -18,22 +18,21 @@ ca-portal/
 
 ---
 
-## Before anything: check two URLs
+## The tiles and their addresses
 
 Open `public/index.html`, scroll to the bottom, and find the block that starts
 `const APPS = [`. Two addresses are guesses, marked `← CHECK THIS URL`:
 
-| Tile | Address in the file | Status |
-|---|---|---|
-| Activity Calendar | `PASTE_YOUR_ACTIVITY_CALENDAR_URL_HERE` | **paste yours in** |
-| Academic Audit | `https://raghava-183.github.io/mca-academic-audit/` | set |
-| HoD Scorecard | `PASTE_YOUR_HOD_SCORECARD_URL_HERE` | **paste yours in** |
-| Achievements Portal | `https://ca-achievements-portal-df3e.vercel.app` | set |
-| Augmented Learning | `https://tallamvyshnavi.github.io/augmented-learning/` | set |
+| Tile | Address in the file |
+|---|---|
+| Activity Calendar | `https://ca-activity-calendar.vercel.app` |
+| Academic Audit | `https://raghava-183.github.io/mca-academic-audit/` |
+| HoD Scorecard | `https://vfstr-hod-scorecard.vercel.app` |
+| Achievements Portal | `https://ca-achievements-portal-df3e.vercel.app` |
+| Augmented Learning | `https://tallamvyshnavi.github.io/augmented-learning/` |
 
-Replace the two placeholders, keeping the quotation marks and the comma at the
-end of the line. A tile with a placeholder still opens — it just shows
-"No address set yet" instead of a broken page.
+All five are set. Attendance, Placements, NBA, Newsletters and Magazines are
+planned tiles with no address yet.
 
 ---
 
