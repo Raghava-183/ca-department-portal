@@ -113,6 +113,31 @@ Drop a new image in as `public/banner.png`, keeping the same wide-and-short shap
 then commit and push. On phones the banner crops to its centre so the Vignan logo
 stays readable.
 
+## How loading works
+
+Each system gets its own frame, created once and then kept. Going back to
+something you already opened is instant, and its login survives. Once the grid
+appears, the portal quietly loads the rest in the background, a couple of seconds
+apart, so most tiles are ready before anyone clicks them. Hovering a tile starts
+that one immediately.
+
+Nothing is ever thrown away while it is still loading. A slow system changes the
+wording after fifteen seconds and offers a **Reload** after forty, but it keeps
+loading behind that message — if it eventually arrives, it simply appears.
+
+## Getting a system to run inside the portal
+
+Two headers decide this, and both belong to the system being embedded, never to
+the portal. A system needs `Content-Security-Policy: frame-ancestors 'self'
+https://ca-department-portal.vercel.app` and must not send `X-Frame-Options`.
+If it also has a login, its session cookie needs `SameSite=None; Secure`, because
+browsers withhold `SameSite=Lax` cookies inside a cross-site frame.
+
+After changing a cookie's rules, sign out and in again inside the portal — an
+existing cookie keeps its old attributes and will not fix itself.
+
+GitHub Pages sites need nothing.
+
 ## If a tile opens to a blank or broken page
 
 Everything opens inside the portal. When something goes wrong you get a panel with

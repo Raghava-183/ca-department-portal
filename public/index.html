@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Computer Applications — Department Portal</title>
+<title>Computer Applications â€” Department Portal</title>
 <link rel="icon" href="data:,">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -144,8 +144,8 @@ footer strong{color:rgba(255,255,255,.85);font-weight:600;}
 /* ---------------- app view ---------------- */
 #app-view{flex:1;position:relative;min-height:0;display:none;}
 #app-view.on{display:block;}
-#frame{width:100%;height:100%;border:0;background:#fff;display:none;}
-#frame.on{display:block;}
+.appframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#fff;display:none;}
+.appframe.on{display:block;}
 
 .overlay{
   position:absolute;inset:0;display:none;align-items:center;justify-content:center;
@@ -162,6 +162,8 @@ footer strong{color:rgba(255,255,255,.85);font-weight:600;}
   word-break:break-all;
 }
 .overlay .acts{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:6px;}
+.overlay.soft{background:rgba(243,246,251,.94);}
+.overlay .note{margin-top:14px;font-size:12.5px;color:var(--muted);}
 .overlay .primary{background:var(--navy);color:#fff;border:0;padding:11px 20px;border-radius:5px;font-size:14px;font-weight:500;}
 .overlay .primary:hover{background:var(--navy-bright);}
 .overlay .ghost{background:var(--white);color:var(--navy);border:1px solid var(--line);padding:11px 18px;border-radius:5px;font-size:14px;font-weight:500;}
@@ -230,6 +232,10 @@ footer strong{color:rgba(255,255,255,.85);font-weight:600;}
         </button>
         <span id="crumb">All systems</span>
         <span class="spacer"></span>
+        <button class="tb-btn" id="reload" hidden title="Reload this system">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 8a6 6 0 11-1.8-4.2M14 2v3.5h-3.5"/></svg>
+          <span>Reload</span>
+        </button>
         <button class="tb-btn" id="signout"><span>Sign out</span></button>
       </div>
       <div class="hero-text" id="hero-text">
@@ -243,15 +249,14 @@ footer strong{color:rgba(255,255,255,.85);font-weight:600;}
     <div class="grid-body"><div class="wrap"><div id="groups"></div></div></div>
     <footer>
       <div class="wrap">
-        <span><strong>Department of Computer Applications</strong> · School of Computing &amp; Informatics</span>
+        <span><strong>Department of Computer Applications</strong> Â· School of Computing &amp; Informatics</span>
         <span>Vignan's Foundation for Science, Technology &amp; Research</span>
       </div>
     </footer>
   </div>
 
   <div id="app-view">
-    <iframe id="frame" title="Department system" referrerpolicy="no-referrer-when-downgrade"></iframe>
-    <div class="overlay" id="loading"><div class="box"><div class="spinner"></div><p>Opening…</p></div></div>
+    <div class="overlay" id="loading"><div class="box"><div class="spinner"></div><p id="loading-msg">Openingâ€¦</p></div></div>
     <div class="overlay" id="failed">
       <div class="box">
         <h4 id="fail-title">This system didn't open</h4>
@@ -268,7 +273,7 @@ footer strong{color:rgba(255,255,255,.85);font-weight:600;}
 
 <script>
 /* ==========================================================================
-   THE TILES — the only part you normally edit.
+   THE TILES â€” the only part you normally edit.
 
    id      short unique name, no spaces
    name    the tile heading
@@ -283,7 +288,7 @@ const APPS = [
   {
     id:"calendar", name:"Activity Calendar", group:"Planning and records",
     desc:"Semester-wise activity calendar with a proof link stored against every event.",
-    url:"https://ca-activity-calendar.vercel.app/",
+    url:"https://ca-activity-calendar.vercel.app",
     icon:"calendar"
   },
   {
@@ -295,7 +300,7 @@ const APPS = [
   {
     id:"scorecard", name:"HoD Scorecard", group:"Planning and records",
     desc:"All 114 metrics scored across the Beginning to Exemplary bands.",
-    url:"https://vfstr-hod-scorecard.vercel.app/",
+    url:"https://vfstr-hod-scorecard.vercel.app",
     icon:"chart"
   },
   {
@@ -332,17 +337,66 @@ const iconSvg = k => '<svg width="20" height="20" viewBox="0 0 20 20" fill="none
 const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
 const $ = s => document.querySelector(s);
-const gate=$("#gate"), shell=$("#shell"), frame=$("#frame");
+const gate=$("#gate"), shell=$("#shell");
 const gridView=$("#grid-view"), appView=$("#app-view"), heroText=$("#hero-text");
-const loading=$("#loading"), failed=$("#failed");
-const crumb=$("#crumb"), back=$("#back");
+const loading=$("#loading"), failed=$("#failed"), stage=$("#app-view");
+const crumb=$("#crumb"), back=$("#back"), reloadBtn=$("#reload");
 let watchdog=null, currentApp=null;
+
+/* Each system gets its own frame, created once and kept alive. Coming back to a
+   system you've already opened is then instant, and its login survives. */
+const frames = Object.create(null);
+const isUrl = u => /^https?:\/\//i.test(u);
+
+/* Warm the connection to a system before it's asked for, so the first open is
+   not spent on DNS and TLS. */
+function preconnect(url){
+  try{
+    const o = new URL(url).origin;
+    if(document.querySelector('link[data-pc="'+o+'"]')) return;
+    ["preconnect","dns-prefetch"].forEach(rel=>{
+      const l=document.createElement("link");
+      l.rel=rel; l.href=o; l.crossOrigin=""; l.dataset.pc=o;
+      document.head.appendChild(l);
+    });
+  }catch(e){}
+}
+
+function makeFrame(app){
+  const f=document.createElement("iframe");
+  f.className="appframe";
+  f.title=app.name;
+  f.referrerPolicy="no-referrer-when-downgrade";
+  f.dataset.id=app.id;
+  f.addEventListener("load", ()=>{
+    f.dataset.loaded="1";
+    if(currentApp && currentApp.id===app.id){
+      clearTimeout(watchdog);
+      loading.classList.remove("on");
+      failed.classList.remove("on");
+    }
+  });
+  stage.appendChild(f);
+  f.src=app.url;
+  frames[app.id]=f;
+  return f;
+}
+
+/* Load the remaining systems quietly in the background once the grid is up, so
+   they are already there when someone clicks. Staggered, never all at once. */
+let prewarmed=false;
+function prewarm(){
+  if(prewarmed) return;
+  prewarmed=true;
+  const pending=APPS.filter(a=>isUrl(a.url) && !frames[a.id]);
+  pending.forEach((a,i)=>setTimeout(()=>{ if(!frames[a.id]) makeFrame(a); }, 2500 + i*2000));
+}
 
 /* ---- sign in ---- */
 async function signIn(){
   const btn=$("#signin"), msg=$("#gate-msg"), val=$("#pw").value;
   if(!val){ msg.textContent="Enter the department password."; return; }
-  btn.disabled=true; btn.textContent="Checking…"; msg.textContent="";
+  btn.disabled=true; btn.textContent="Checkingâ€¦"; msg.textContent="";
   try{
     const r=await fetch("/api/login",{
       method:"POST", headers:{"Content-Type":"application/json"},
@@ -397,6 +451,16 @@ function buildGrid(){
     const t=e.target.closest(".tile");
     if(t) openApp(t.dataset.id);
   });
+
+  // Touching or hovering a tile starts its frame a moment early.
+  const warm = e => {
+    const t=e.target.closest(".tile");
+    if(!t) return;
+    const a=APPS.find(x=>x.id===t.dataset.id);
+    if(a && isUrl(a.url) && !frames[a.id]) makeFrame(a);
+  };
+  host.addEventListener("pointerenter", warm, true);
+  host.addEventListener("touchstart", warm, {passive:true});
 }
 
 /* ---- open a system, in place ---- */
@@ -413,19 +477,42 @@ function openApp(id){
   back.hidden=false;
   history.replaceState(null,"","#"+app.id);
 
-  if(!/^https?:\/\//i.test(app.url)){
+  Object.values(frames).forEach(f=>f.classList.remove("on"));
+
+  if(!isUrl(app.url)){
+    reloadBtn.hidden=true;
+    loading.classList.remove("on");
     showFail(app,"No address set yet",
       "This tile still has a placeholder instead of a web address. Open index.html and paste the live address into this tile.");
     return;
   }
 
+  reloadBtn.hidden=false;
+  const f = frames[app.id] || makeFrame(app);
+  f.classList.add("on");
+
+  if(f.dataset.loaded==="1"){          // already open from before â€” instant
+    loading.classList.remove("on");
+    return;
+  }
+
+  $("#loading-msg").textContent="Opening \u2026";
   loading.classList.add("on");
-  frame.classList.add("on");
-  frame.src=app.url;
+
+  /* Nothing is ever thrown away mid-load. At 15 seconds we only change the
+     wording; at 40 we offer a retry, and the frame is still loading behind it,
+     so a slow system that finally arrives simply appears. */
   watchdog=setTimeout(()=>{
-    if(loading.classList.contains("on")) showFail(app,"This system is taking too long",
-      "It may be waking up from sleep, or the address may be wrong. Give it another try.");
-  }, 12000);
+    if(currentApp!==app || f.dataset.loaded==="1") return;
+    $("#loading-msg").textContent="Still opening \u2014 this one is waking up\u2026";
+    watchdog=setTimeout(()=>{
+      if(currentApp!==app || f.dataset.loaded==="1") return;
+      loading.classList.remove("on");
+      failed.classList.add("soft");
+      showFail(app,"This system is slow to answer",
+        "It is still loading in the background. Wait a moment longer, or reload it.");
+    }, 25000);
+  }, 15000);
 }
 
 function showGrid(){
@@ -433,11 +520,14 @@ function showGrid(){
   appView.classList.remove("on");
   loading.classList.remove("on");
   failed.classList.remove("on");
-  frame.classList.remove("on"); frame.removeAttribute("src");
+  failed.classList.remove("soft");
+  Object.values(frames).forEach(f=>f.classList.remove("on"));
+  currentApp=null;
   gridView.classList.add("on");
   heroText.hidden=false;
   crumb.textContent="All systems";
   back.hidden=true;
+  reloadBtn.hidden=true;
   history.replaceState(null,"","#");
 }
 back.addEventListener("click", showGrid);
@@ -449,21 +539,28 @@ document.addEventListener("keydown", e=>{
   if(e.key==="Escape" && appView.classList.contains("on")) showGrid();
 });
 
-frame.addEventListener("load", ()=>{ clearTimeout(watchdog); loading.classList.remove("on"); });
+function reloadCurrent(){
+  if(!currentApp || !isUrl(currentApp.url)) return;
+  const old=frames[currentApp.id];
+  if(old){ old.remove(); delete frames[currentApp.id]; }
+  openApp(currentApp.id);
+}
+reloadBtn.addEventListener("click", reloadCurrent);
 
 function showFail(app,title,msg){
   clearTimeout(watchdog);
-  loading.classList.remove("on");
-  frame.classList.remove("on"); frame.removeAttribute("src");
   $("#fail-title").textContent = title;
   $("#fail-msg").textContent = msg;
   $("#fail-addr").textContent = app.url;
-  $("#fail-direct").hidden = !/^https?:\/\//i.test(app.url);
+  $("#fail-direct").hidden = !isUrl(app.url);
   failed.classList.add("on");
 }
-$("#fail-retry").addEventListener("click", ()=>{ if(currentApp) openApp(currentApp.id); });
+$("#fail-retry").addEventListener("click", ()=>{
+  failed.classList.remove("on"); failed.classList.remove("soft");
+  reloadCurrent();
+});
 $("#fail-direct").addEventListener("click", ()=>{
-  if(currentApp && /^https?:\/\//i.test(currentApp.url)) window.open(currentApp.url,"_blank","noopener");
+  if(currentApp && isUrl(currentApp.url)) window.open(currentApp.url,"_blank","noopener");
 });
 
 /* ---- go ---- */
@@ -471,10 +568,13 @@ function start(){
   gate.style.display="none";
   shell.classList.add("on");
   if(!$("#groups").children.length) buildGrid();
+  APPS.forEach(a=>{ if(isUrl(a.url)) preconnect(a.url); });
   const want=location.hash.replace("#","");
   if(want && APPS.some(a=>a.id===want)) openApp(want); else showGrid();
+  prewarm();
 }
 if(sessionStorage.getItem("ca_portal")==="1") start();
 </script>
 </body>
 </html>
+
