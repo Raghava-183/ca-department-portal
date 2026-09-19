@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Computer Applications â€” Department Portal</title>
+<title>Computer Applications — Department Portal</title>
 <link rel="icon" href="data:,">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -132,6 +132,15 @@ header{flex:none;}
 }
 .tile .nm{font-size:16px;font-weight:600;color:var(--navy);line-height:1.3;padding-right:34px;}
 .tile .ds{font-size:13px;line-height:1.55;color:var(--muted);flex:1;}
+.tile .chip{
+  align-self:flex-start;padding:3px 9px;border-radius:999px;
+  background:var(--gold-wash);color:var(--gold-deep);
+  font-size:11px;font-weight:700;border:1px solid #EBD9A8;
+}
+.tile.planned{background:#FAFCFE;}
+.tile.planned .ico{background:#7E90A8;}
+.tile.planned::after{background:#C9D3E0;}
+.tile.planned:hover::after{background:var(--navy-bright);}
 
 footer{
   flex:none;background:var(--navy-deep);color:rgba(255,255,255,.62);
@@ -249,14 +258,14 @@ footer strong{color:rgba(255,255,255,.85);font-weight:600;}
     <div class="grid-body"><div class="wrap"><div id="groups"></div></div></div>
     <footer>
       <div class="wrap">
-        <span><strong>Department of Computer Applications</strong> Â· School of Computing &amp; Informatics</span>
+        <span><strong>Department of Computer Applications</strong> · School of Computing &amp; Informatics</span>
         <span>Vignan's Foundation for Science, Technology &amp; Research</span>
       </div>
     </footer>
   </div>
 
   <div id="app-view">
-    <div class="overlay" id="loading"><div class="box"><div class="spinner"></div><p id="loading-msg">Openingâ€¦</p></div></div>
+    <div class="overlay" id="loading"><div class="box"><div class="spinner"></div><p id="loading-msg">Opening…</p></div></div>
     <div class="overlay" id="failed">
       <div class="box">
         <h4 id="fail-title">This system didn't open</h4>
@@ -265,6 +274,7 @@ footer strong{color:rgba(255,255,255,.85);font-weight:600;}
         <div class="acts">
           <button class="primary" id="fail-retry">Try again</button>
           <button class="ghost" id="fail-direct">Check the address</button>
+          <button class="ghost" id="fail-back" hidden>All systems</button>
         </div>
       </div>
     </div>
@@ -273,7 +283,7 @@ footer strong{color:rgba(255,255,255,.85);font-weight:600;}
 
 <script>
 /* ==========================================================================
-   THE TILES â€” the only part you normally edit.
+   THE TILES — the only part you normally edit.
 
    id      short unique name, no spaces
    name    the tile heading
@@ -288,7 +298,7 @@ const APPS = [
   {
     id:"calendar", name:"Activity Calendar", group:"Planning and records",
     desc:"Semester-wise activity calendar with a proof link stored against every event.",
-    url:"https://ca-activity-calendar.vercel.app",
+    url:"PASTE_YOUR_ACTIVITY_CALENDAR_URL_HERE",
     icon:"calendar"
   },
   {
@@ -300,7 +310,7 @@ const APPS = [
   {
     id:"scorecard", name:"HoD Scorecard", group:"Planning and records",
     desc:"All 114 metrics scored across the Beginning to Exemplary bands.",
-    url:"https://vfstr-hod-scorecard.vercel.app",
+    url:"PASTE_YOUR_HOD_SCORECARD_URL_HERE",
     icon:"chart"
   },
   {
@@ -314,6 +324,38 @@ const APPS = [
     desc:"Identifies slow and advanced learners from the module marks and builds the subject-wise lists.",
     url:"https://tallamvyshnavi.github.io/augmented-learning/",
     icon:"students"
+  },
+
+  /* ---------------------------------------------------------------------
+     Still to be built. `planned:true` marks the tile "Being built" and shows
+     a clear message instead of an error when someone opens it.
+     When a system goes live: paste its address into url and delete the
+     planned line. Nothing else changes.
+     --------------------------------------------------------------------- */
+  {
+    id:"attendance", name:"Attendance", group:"Students",
+    desc:"Class-wise and subject-wise attendance, with shortage lists and the monthly report.",
+    url:"", icon:"schedule", planned:true
+  },
+  {
+    id:"placements", name:"Placements", group:"Students",
+    desc:"Offers, companies and student-wise placement records for the year.",
+    url:"", icon:"briefcase", planned:true
+  },
+  {
+    id:"nba", name:"NBA", group:"Planning and records",
+    desc:"Accreditation criteria with the evidence filed against each one.",
+    url:"", icon:"seal", planned:true
+  },
+  {
+    id:"newsletters", name:"Newsletters", group:"Publications",
+    desc:"Department newsletters by issue, with the published file against each.",
+    url:"", icon:"news", planned:true
+  },
+  {
+    id:"magazines", name:"Magazines", group:"Publications",
+    desc:"Department magazines by edition, with contributors and the published file.",
+    url:"", icon:"book", planned:true
   }
 ];
 
@@ -329,7 +371,10 @@ const ICONS = {
   report:'<path d="M5 3h7l3 3v11H5zM12 3v3h3M7.5 10h5M7.5 13h5"/>',
   folder:'<path d="M3 6h5l1.5 2H17v8H3z"/>',
   book:'<path d="M4 4h5a2 2 0 012 2v10a2 2 0 00-2-2H4zM16 4h-5a2 2 0 00-2 2v10a2 2 0 012-2h5z"/>',
-  globe:'<path d="M10 3a7 7 0 100 14 7 7 0 000-14zM3 10h14M10 3c2 2.2 2 11.8 0 14M10 3c-2 2.2-2 11.8 0 14"/>'
+  globe:'<path d="M10 3a7 7 0 100 14 7 7 0 000-14zM3 10h14M10 3c2 2.2 2 11.8 0 14M10 3c-2 2.2-2 11.8 0 14"/>',
+  news:'<path d="M3 5h11v11H4.5A1.5 1.5 0 013 14.5zM14 8h3v6.5a1.5 1.5 0 01-3 0zM5.5 7.5h6M5.5 10h6M5.5 12.5h4"/>',
+  seal:'<path d="M10 2.5l2 1.3 2.4-.2.6 2.3 1.8 1.6-1.2 2.1.3 2.4-2.3.7-1.4 2-2.2-.9-2.2.9-1.4-2-2.3-.7.3-2.4L3.2 7.5 5 5.9l.6-2.3L8 3.8zM7.7 9.9l1.5 1.5 3-3.2"/>',
+  briefcase:'<path d="M3 7h14v8.5a1 1 0 01-1 1H4a1 1 0 01-1-1zM7.5 7V5a1 1 0 011-1h3a1 1 0 011 1v2M3 11h14"/>'
 };
 const iconSvg = k => '<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" '
   + 'stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">'
@@ -388,7 +433,7 @@ let prewarmed=false;
 function prewarm(){
   if(prewarmed) return;
   prewarmed=true;
-  const pending=APPS.filter(a=>isUrl(a.url) && !frames[a.id]);
+  const pending=APPS.filter(a=>!a.planned && isUrl(a.url) && !frames[a.id]);
   pending.forEach((a,i)=>setTimeout(()=>{ if(!frames[a.id]) makeFrame(a); }, 2500 + i*2000));
 }
 
@@ -396,7 +441,7 @@ function prewarm(){
 async function signIn(){
   const btn=$("#signin"), msg=$("#gate-msg"), val=$("#pw").value;
   if(!val){ msg.textContent="Enter the department password."; return; }
-  btn.disabled=true; btn.textContent="Checkingâ€¦"; msg.textContent="";
+  btn.disabled=true; btn.textContent="Checking…"; msg.textContent="";
   try{
     const r=await fetch("/api/login",{
       method:"POST", headers:{"Content-Type":"application/json"},
@@ -438,10 +483,12 @@ function buildGrid(){
     grid.className="grid";
     byGroup[g].forEach(a=>{
       const t=document.createElement("button");
-      t.className="tile"; t.dataset.id=a.id;
+      t.className="tile" + (a.planned ? " planned" : "");
+      t.dataset.id=a.id;
       t.innerHTML='<span class="ico">'+iconSvg(a.icon)+'</span>'
                  +'<span class="nm">'+esc(a.name)+'</span>'
-                 +'<span class="ds">'+esc(a.desc||"")+'</span>';
+                 +'<span class="ds">'+esc(a.desc||"")+'</span>'
+                 +(a.planned ? '<span class="chip">Being built</span>' : '');
       grid.appendChild(t);
     });
     host.appendChild(grid);
@@ -457,7 +504,7 @@ function buildGrid(){
     const t=e.target.closest(".tile");
     if(!t) return;
     const a=APPS.find(x=>x.id===t.dataset.id);
-    if(a && isUrl(a.url) && !frames[a.id]) makeFrame(a);
+    if(a && !a.planned && isUrl(a.url) && !frames[a.id]) makeFrame(a);
   };
   host.addEventListener("pointerenter", warm, true);
   host.addEventListener("touchstart", warm, {passive:true});
@@ -479,11 +526,20 @@ function openApp(id){
 
   Object.values(frames).forEach(f=>f.classList.remove("on"));
 
+  if(app.planned){
+    reloadBtn.hidden=true;
+    loading.classList.remove("on");
+    showFail(app, app.name + " is being built",
+      "This system is planned for the department portal. Once it is ready its address goes into this tile and it will open here like the rest.",
+      "planned");
+    return;
+  }
+
   if(!isUrl(app.url)){
     reloadBtn.hidden=true;
     loading.classList.remove("on");
     showFail(app,"No address set yet",
-      "This tile still has a placeholder instead of a web address. Open index.html and paste the live address into this tile.");
+      "This tile has no web address in it yet. Open index.html and paste the live address into this tile.");
     return;
   }
 
@@ -491,7 +547,7 @@ function openApp(id){
   const f = frames[app.id] || makeFrame(app);
   f.classList.add("on");
 
-  if(f.dataset.loaded==="1"){          // already open from before â€” instant
+  if(f.dataset.loaded==="1"){          // already open from before — instant
     loading.classList.remove("on");
     return;
   }
@@ -547,14 +603,19 @@ function reloadCurrent(){
 }
 reloadBtn.addEventListener("click", reloadCurrent);
 
-function showFail(app,title,msg){
+function showFail(app,title,msg,kind){
   clearTimeout(watchdog);
+  const planned = kind==="planned";
   $("#fail-title").textContent = title;
   $("#fail-msg").textContent = msg;
   $("#fail-addr").textContent = app.url;
-  $("#fail-direct").hidden = !isUrl(app.url);
+  $("#fail-addr").hidden = planned || !app.url;
+  $("#fail-retry").hidden = planned;
+  $("#fail-direct").hidden = planned || !isUrl(app.url);
+  $("#fail-back").hidden = !planned;
   failed.classList.add("on");
 }
+$("#fail-back").addEventListener("click", showGrid);
 $("#fail-retry").addEventListener("click", ()=>{
   failed.classList.remove("on"); failed.classList.remove("soft");
   reloadCurrent();
@@ -568,7 +629,7 @@ function start(){
   gate.style.display="none";
   shell.classList.add("on");
   if(!$("#groups").children.length) buildGrid();
-  APPS.forEach(a=>{ if(isUrl(a.url)) preconnect(a.url); });
+  APPS.forEach(a=>{ if(!a.planned && isUrl(a.url)) preconnect(a.url); });
   const want=location.hash.replace("#","");
   if(want && APPS.some(a=>a.id===want)) openApp(want); else showGrid();
   prewarm();
@@ -577,4 +638,3 @@ if(sessionStorage.getItem("ca_portal")==="1") start();
 </script>
 </body>
 </html>
-

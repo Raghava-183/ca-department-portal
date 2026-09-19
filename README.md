@@ -87,7 +87,17 @@ change these fields:
 | `group` | the heading it sits under — tiles sharing a group sit together |
 | `desc` | the sentence on the tile |
 | `url` | the live address |
-| `icon` | `calendar` `audit` `chart` `award` `students` `schedule` `report` `folder` `book` `globe` |
+| `icon` | `calendar` `audit` `chart` `award` `students` `schedule` `report` `folder` `book` `globe` `news` `seal` `briefcase` |
+| `planned` | `planned:true` marks it "Being built"; leave the line out for a live system |
+
+## Systems not built yet
+
+Attendance, Placements, NBA, Newsletters and Magazines are in the grid as
+planned tiles. They show a **Being built** chip and, when opened, say so plainly
+instead of showing an error.
+
+When one goes live: paste its address into that tile's `url` and delete its
+`planned:true` line. Nothing else changes.
 
 Groups appear in the order the tiles are listed, so keep tiles of the same group
 next to each other. There's a switched-off example at the end of the list showing
