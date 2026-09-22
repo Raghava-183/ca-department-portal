@@ -78,6 +78,8 @@ label.field{display:block;font-size:13px;font-weight:600;color:var(--navy);margi
 /* ---------------- shell ---------------- */
 #shell{display:none;flex-direction:column;height:100%;}
 #shell.on{display:flex;}
+/* An open system brings its own banner, so the portal's copy steps aside. */
+#shell.app-open > header{display:none;}
 header{flex:none;}
 
 .hero{
@@ -518,6 +520,7 @@ function openApp(id){
   clearTimeout(watchdog);
   gridView.classList.remove("on");
   appView.classList.add("on");
+  shell.classList.add("app-open");
   heroText.hidden=true;
   failed.classList.remove("on");
   crumb.textContent=app.name;
@@ -574,6 +577,7 @@ function openApp(id){
 function showGrid(){
   clearTimeout(watchdog);
   appView.classList.remove("on");
+  shell.classList.remove("app-open");
   loading.classList.remove("on");
   failed.classList.remove("on");
   failed.classList.remove("soft");
