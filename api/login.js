@@ -1,5 +1,5 @@
 // Checks the department password.
-// The password itself is NEVER in this file or in the web page — it lives in
+// The password itself is never in this file or in the web page. It lives in
 // Vercel under Settings > Environment Variables, as PORTAL_PASSWORD.
 
 module.exports = async (req, res) => {
@@ -10,14 +10,10 @@ module.exports = async (req, res) => {
 
   const expected = process.env.PORTAL_PASSWORD;
   if (!expected) {
-    res.status(500).json({
-      ok: false,
-      error: 'PORTAL_PASSWORD is not set in Vercel yet.'
-    });
+    res.status(500).json({ ok: false, error: 'PORTAL_PASSWORD is not set in Vercel yet.' });
     return;
   }
 
-  // Vercel parses JSON bodies for us, but handle a raw string just in case.
   let body = req.body;
   if (typeof body === 'string') {
     try { body = JSON.parse(body); } catch (e) { body = {}; }

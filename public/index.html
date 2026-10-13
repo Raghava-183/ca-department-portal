@@ -3,181 +3,233 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Computer Applications — Department Portal</title>
+<title>Department Portal — Computer Applications, VFSTR</title>
 <link rel="icon" href="data:,">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
 <style>
-/* =========================================================
-   To change the tiles, scroll to the bottom of this file.
-   The list is clearly marked. Nothing up here needs editing.
-   ========================================================= */
+/* ===========================================================
+   Department Portal — Computer Applications, VFSTR
+
+   To change the tiles or the notices, scroll to the bottom of
+   this file. Both lists are marked. Nothing up here needs
+   editing to add a system.
+   =========================================================== */
 
 :root{
-  --navy:#09266A;          /* sampled from the department banner */
+  --navy:#09266A;        /* sampled from the department banner */
   --navy-deep:#051840;
-  --navy-bright:#0F3E9E;
+  --navy-band:#123A8F;
   --gold:#D9A227;
-  --gold-deep:#B0821A;
-  --gold-wash:#FBF3DF;
-  --paper:#F3F6FB;
+  --gold-deep:#A8761A;
+  --gold-wash:#FCF4E2;
+  --paper:#F2F5F9;
   --white:#FFFFFF;
-  --line:#DCE4EF;
+  --line:#D3DCE8;
+  --line-soft:#E6ECF4;
   --ink:#0B1B33;
-  --muted:#5A6B84;
+  --muted:#55667E;
+
+  --wrap:1280px;
+  --serif:'Source Serif 4',Georgia,'Times New Roman',serif;
+  --sans:'Public Sans',system-ui,-apple-system,sans-serif;
 }
 
 *{box-sizing:border-box;margin:0;padding:0;}
 html,body{height:100%;}
 body{
-  font-family:'Archivo',system-ui,sans-serif;
-  background:var(--paper);color:var(--ink);
+  font-family:var(--sans);
+  background:var(--paper);
+  color:var(--ink);
+  font-size:16px;
   -webkit-font-smoothing:antialiased;
 }
-button{font:inherit;cursor:pointer;}
+button{font:inherit;cursor:pointer;color:inherit;}
+a{color:inherit;}
 [hidden]{display:none !important;}
 :focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 24px;}
 
-/* ---------------- banner ---------------- */
-.banner-wrap{width:100%;background:#fff;line-height:0;}
-.banner-wrap img{width:100%;height:auto;display:block;}
-.gold-rule{height:3px;background:linear-gradient(90deg,var(--gold-deep),var(--gold) 35%,var(--gold) 65%,var(--gold-deep));}
+/* ---------- banner ---------- */
+.banner{background:#fff;line-height:0;}
+.banner img{width:100%;height:auto;display:block;}
+.rule-gold{height:3px;background:linear-gradient(90deg,var(--gold-deep),var(--gold) 30%,var(--gold) 70%,var(--gold-deep));}
 
-/* ---------------- sign in ---------------- */
-#gate{
-  position:fixed;inset:0;z-index:100;
-  background:
-    radial-gradient(1100px 420px at 50% -10%, rgba(217,162,39,.18), transparent 70%),
-    linear-gradient(165deg,var(--navy) 0%,var(--navy-deep) 100%);
-  display:flex;flex-direction:column;overflow:auto;
+/* ---------- sign in ---------- */
+#gate{position:fixed;inset:0;z-index:100;display:flex;flex-direction:column;overflow:auto;background:var(--navy-deep);}
+.gate-body{
+  flex:1;display:flex;align-items:center;justify-content:center;padding:48px 24px;
+  background-image:linear-gradient(195deg,rgba(9,38,106,.88),rgba(5,24,64,.96)),url('hero.jpg');
+  background-size:cover;background-position:center 78%;
 }
-.gate-body{flex:1;display:flex;align-items:center;justify-content:center;padding:40px 24px;}
 .gate-card{
-  width:100%;max-width:382px;background:var(--white);
-  border-radius:9px;padding:32px 30px 28px;
-  border-top:4px solid var(--gold);
-  box-shadow:0 18px 48px rgba(3,14,40,.32);
+  width:100%;max-width:392px;background:var(--white);
+  padding:36px 34px 30px;border-top:4px solid var(--gold);
+  box-shadow:0 24px 60px rgba(2,10,30,.45);
 }
-.gate-card h1{font-family:'Newsreader',Georgia,serif;font-size:25px;font-weight:400;color:var(--navy);}
-.gate-card .hint{margin-top:7px;font-size:13.5px;line-height:1.55;color:var(--muted);}
-label.field{display:block;font-size:13px;font-weight:600;color:var(--navy);margin:24px 0 7px;}
+.gate-card h1{font-family:var(--serif);font-size:27px;font-weight:600;color:var(--navy);line-height:1.2;}
+.gate-card .sub{margin-top:8px;font-size:14px;line-height:1.55;color:var(--muted);}
+label.field{display:block;font-size:13.5px;font-weight:600;color:var(--navy);margin:26px 0 7px;}
 #pw{
-  width:100%;padding:12px 13px;font-size:15px;
-  border:1px solid var(--line);border-radius:5px;background:var(--paper);color:var(--ink);
+  width:100%;padding:12px 13px;font-size:15px;font-family:var(--sans);
+  border:1px solid var(--line);border-radius:3px;background:var(--paper);color:var(--ink);
 }
-#pw:focus{border-color:var(--navy-bright);background:#fff;}
+#pw:focus{border-color:var(--navy-band);background:#fff;}
 #signin{
-  width:100%;margin-top:13px;padding:12px;
-  background:var(--navy);color:#fff;border:0;border-radius:5px;font-weight:600;font-size:15px;
+  width:100%;margin-top:14px;padding:13px;border:0;border-radius:3px;
+  background:var(--navy);color:#fff;font-weight:600;font-size:15px;font-family:var(--sans);
 }
-#signin:hover{background:var(--navy-bright);}
+#signin:hover{background:var(--navy-band);}
 #signin:disabled{opacity:.6;cursor:default;}
-#gate-msg{min-height:20px;margin-top:11px;font-size:13.5px;color:#B3261E;}
+#gate-msg{min-height:20px;margin-top:11px;font-size:13.5px;color:#A4231B;}
 
-/* ---------------- shell ---------------- */
-#shell{display:none;flex-direction:column;height:100%;}
+/* ---------- shell ---------- */
+#shell{display:none;flex-direction:column;min-height:100%;}
 #shell.on{display:flex;}
-/* An open system brings its own banner, so the portal's copy steps aside. */
-#shell.app-open > header{display:none;}
-header{flex:none;}
+/* while a system is open it gets the whole window below the banner */
+body.viewing #shell{height:100vh;min-height:0;overflow:hidden;}
+body.viewing .hero,body.viewing .figures,body.viewing footer{display:none;}
 
+.utility{background:var(--navy-deep);color:rgba(255,255,255,.72);font-size:12.5px;}
+.utility .wrap{display:flex;align-items:center;gap:20px;height:34px;}
+.utility .sp{flex:1;}
+.utility b{color:#fff;font-weight:600;}
+#signout{
+  background:none;border:0;color:rgba(255,255,255,.72);
+  font-size:12.5px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.35);
+}
+#signout:hover{color:var(--gold);border-color:var(--gold);}
+
+nav{background:var(--navy-band);}
+nav .wrap{display:flex;align-items:stretch;gap:0;overflow-x:auto;scrollbar-width:none;}
+nav .wrap::-webkit-scrollbar{display:none;}
+nav button{
+  background:none;border:0;color:rgba(255,255,255,.84);
+  padding:14px 20px;font-size:14.5px;font-weight:500;white-space:nowrap;
+  border-bottom:3px solid transparent;
+}
+nav button:first-child{padding-left:0;}
+nav button:hover{color:#fff;background:rgba(255,255,255,.07);}
+nav button[aria-current="true"]{color:#fff;font-weight:600;border-bottom-color:var(--gold);}
+
+/* ---------- hero ---------- */
 .hero{
-  flex:none;
-  background:linear-gradient(112deg,var(--navy) 0%,var(--navy-deep) 100%);
-  color:#fff;
+  position:relative;color:#fff;
+  background-image:linear-gradient(100deg,rgba(5,24,64,.93) 0%,rgba(9,38,106,.82) 55%,rgba(9,38,106,.64) 100%),url('hero.jpg');
+  background-size:cover;background-position:center 76%;
 }
-.wrap{max-width:1180px;margin:0 auto;padding:0 22px;}
-
-.bar{display:flex;align-items:center;gap:13px;height:54px;}
-#crumb{font-size:14.5px;font-weight:600;color:#fff;}
-.bar .spacer{flex:1;}
-.tb-btn{
-  background:transparent;border:1px solid rgba(255,255,255,.3);color:#fff;
-  padding:7px 13px;border-radius:5px;font-size:13px;font-weight:500;
-  display:inline-flex;align-items:center;gap:7px;
+.hero .wrap{padding:44px 24px 46px;}
+.hero h1{font-family:var(--serif);font-size:43px;font-weight:600;line-height:1.1;letter-spacing:-.01em;}
+.hero p{margin-top:12px;font-size:16px;line-height:1.6;color:rgba(255,255,255,.82);max-width:50ch;}
+.hero .year{
+  display:inline-block;margin-bottom:16px;padding:5px 11px;
+  border:1px solid rgba(217,162,39,.6);color:var(--gold);
+  font-size:12.5px;font-weight:600;letter-spacing:.01em;
 }
-.tb-btn:hover{border-color:var(--gold);color:var(--gold);background:rgba(255,255,255,.05);}
-.tb-btn svg{display:block;}
 
-.hero-text{padding:6px 0 30px;}
-.hero-text h2{font-family:'Newsreader',Georgia,serif;font-size:30px;font-weight:400;line-height:1.2;}
-.hero-text p{margin-top:8px;font-size:14.5px;line-height:1.6;color:rgba(255,255,255,.72);max-width:56ch;}
+/* ---------- figures ---------- */
+.figures{background:var(--white);border-bottom:1px solid var(--line);}
+.figures .wrap{display:flex;flex-wrap:wrap;}
+.fig{padding:20px 30px 20px 0;margin-right:30px;border-right:1px solid var(--line-soft);}
+.fig:last-child{border-right:0;}
+.fig .n{font-family:var(--serif);font-size:30px;font-weight:600;color:var(--navy);line-height:1;}
+.fig .t{margin-top:5px;font-size:13px;color:var(--muted);}
 
-/* ---------------- grid ---------------- */
-#grid-view{flex:1;overflow-y:auto;display:none;flex-direction:column;}
-#grid-view.on{display:flex;}
-.grid-body{flex:1;padding:32px 0 56px;}
+/* ---------- body ---------- */
+main{flex:1;display:flex;flex-direction:column;min-height:0;}
+#grid-view{display:none;}
+#grid-view.on{display:block;}
+.cols{display:grid;grid-template-columns:minmax(0,1fr) 266px;gap:40px;padding:36px 0 56px;}
 
-.group-head{display:flex;align-items:center;gap:12px;margin:0 0 15px;}
-.group-head:not(:first-child){margin-top:34px;}
-.group-head .dot{width:9px;height:9px;background:var(--gold);flex:none;transform:rotate(45deg);}
-.group-head h3{font-size:14px;font-weight:700;color:var(--navy);}
-.group-head .bar-line{flex:1;height:1px;background:var(--line);}
+.area{margin-bottom:34px;}
+.area:last-child{margin-bottom:0;}
+.area-head{display:flex;align-items:center;gap:13px;margin-bottom:15px;}
+.area-head h2{font-family:var(--serif);font-size:20px;font-weight:600;color:var(--navy);}
+.area-head .ln{flex:1;height:1px;background:var(--line);}
+.area-head .ct{font-size:13px;color:var(--muted);}
 
-.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(248px,1fr));}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(178px,1fr));}
 .tile{
   position:relative;overflow:hidden;text-align:left;
-  background:var(--white);border:1px solid var(--line);border-radius:8px;
-  padding:20px 18px 18px;display:flex;flex-direction:column;gap:11px;min-height:160px;
-  transition:border-color .12s ease, box-shadow .12s ease;
+  background:var(--white);border:1px solid var(--line);border-radius:3px;
+  padding:18px 15px 16px;display:flex;flex-direction:column;gap:9px;min-height:178px;
 }
-.tile::after{                     /* angled corner, echoing the banner's cut edges */
-  content:"";position:absolute;top:0;right:0;width:46px;height:46px;
+.tile::after{                       /* the cut corner, taken from the banner */
+  content:"";position:absolute;top:0;right:0;width:42px;height:42px;
   background:var(--gold);clip-path:polygon(100% 0,100% 100%,0 0);
 }
-.tile:hover{border-color:var(--navy-bright);box-shadow:0 6px 18px rgba(9,38,106,.12);}
-.tile:hover::after{background:var(--navy-bright);}
+.tile:hover{border-color:var(--navy-band);}
+.tile:hover::after{background:var(--navy-band);}
 .tile .ico{
-  width:38px;height:38px;border-radius:7px;background:var(--navy);color:#fff;
+  width:36px;height:36px;border-radius:3px;background:var(--navy);color:#fff;
   display:flex;align-items:center;justify-content:center;flex:none;
 }
-.tile .nm{font-size:16px;font-weight:600;color:var(--navy);line-height:1.3;padding-right:34px;}
-.tile .ds{font-size:13px;line-height:1.55;color:var(--muted);flex:1;}
+.tile .nm{font-family:var(--serif);font-size:16.5px;font-weight:600;color:var(--navy);line-height:1.25;padding-right:26px;}
+.tile .ds{font-size:12.5px;line-height:1.5;color:var(--muted);flex:1;}
 .tile .chip{
-  align-self:flex-start;padding:3px 9px;border-radius:999px;
+  align-self:flex-start;padding:3px 9px;border-radius:2px;
   background:var(--gold-wash);color:var(--gold-deep);
-  font-size:11px;font-weight:700;border:1px solid #EBD9A8;
+  font-size:11.5px;font-weight:600;border:1px solid #EEDDB2;
 }
 .tile.planned{background:#FAFCFE;}
-.tile.planned .ico{background:#7E90A8;}
-.tile.planned::after{background:#C9D3E0;}
-.tile.planned:hover::after{background:var(--navy-bright);}
+.tile.planned .ico{background:#75879F;}
+.tile.planned::after{background:#CBD5E2;}
+.tile.planned:hover::after{background:var(--navy-band);}
 
-footer{
-  flex:none;background:var(--navy-deep);color:rgba(255,255,255,.62);
-  font-size:12.5px;line-height:1.6;
+/* ---------- sidebar ---------- */
+aside section{background:var(--white);border:1px solid var(--line);border-radius:3px;margin-bottom:18px;}
+aside h3{
+  font-family:var(--serif);font-size:16px;font-weight:600;color:var(--navy);
+  padding:14px 16px;border-bottom:1px solid var(--line-soft);
 }
-footer .wrap{padding-top:16px;padding-bottom:18px;
-  display:flex;flex-wrap:wrap;gap:6px 18px;justify-content:space-between;}
-footer strong{color:rgba(255,255,255,.85);font-weight:600;}
+.notice{padding:13px 16px;border-bottom:1px solid var(--line-soft);}
+.notice:last-child{border-bottom:0;}
+.notice .d{font-size:11.5px;color:var(--gold-deep);font-weight:600;}
+.notice .x{margin-top:4px;font-size:13.5px;line-height:1.5;}
+.empty{padding:16px;font-size:13.5px;line-height:1.55;color:var(--muted);}
+.qlinks{padding:7px 0;}
+.qlinks button{
+  display:block;width:100%;text-align:left;background:none;border:0;
+  padding:9px 16px;font-size:13.5px;color:var(--navy);
+}
+.qlinks button:hover{background:var(--gold-wash);}
 
-/* ---------------- app view ---------------- */
-#app-view{flex:1;position:relative;min-height:0;display:none;}
+/* ---------- a system, open ---------- */
+#app-view{display:none;flex:1;position:relative;min-height:0;background:#fff;}
 #app-view.on{display:block;}
-.appframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#fff;display:none;}
+.appframe{position:absolute;inset:46px 0 0 0;border:0;background:#fff;display:none;}
 .appframe.on{display:block;}
-
+.appbar{
+  position:absolute;top:0;left:0;right:0;z-index:2;height:46px;
+  background:var(--white);border-bottom:1px solid var(--line);
+  display:flex;align-items:center;gap:13px;padding:0 18px;
+}
+.appbar .sp{flex:1;}
+.appbar .ttl{font-family:var(--serif);font-size:16px;font-weight:600;color:var(--navy);}
+.bbtn{
+  background:var(--white);border:1px solid var(--line);border-radius:3px;
+  padding:6px 12px;font-size:13px;font-weight:500;color:var(--navy);
+  display:inline-flex;align-items:center;gap:6px;
+}
+.bbtn:hover{border-color:var(--gold);background:var(--gold-wash);}
 .overlay{
-  position:absolute;inset:0;display:none;align-items:center;justify-content:center;
-  padding:30px;background:var(--paper);
+  position:absolute;inset:46px 0 0 0;display:none;
+  align-items:center;justify-content:center;padding:30px;background:var(--paper);
 }
 .overlay.on{display:flex;}
-.overlay .box{max-width:460px;text-align:center;}
-.overlay h4{font-family:'Newsreader',Georgia,serif;font-size:22px;font-weight:400;color:var(--navy);margin-bottom:10px;}
-.overlay p{font-size:14px;line-height:1.65;color:var(--muted);}
+.overlay .box{max-width:470px;text-align:center;}
+.overlay h4{font-family:var(--serif);font-size:23px;font-weight:600;color:var(--navy);margin-bottom:10px;}
+.overlay p{font-size:14.5px;line-height:1.65;color:var(--muted);}
 .overlay .addr{
-  display:block;margin:14px 0;padding:9px 12px;background:var(--white);
-  border:1px solid var(--line);border-radius:5px;
-  font-family:ui-monospace,Consolas,monospace;font-size:12.5px;color:var(--ink);
-  word-break:break-all;
+  display:block;margin:15px 0;padding:9px 12px;background:var(--white);
+  border:1px solid var(--line);border-radius:3px;
+  font-family:ui-monospace,Consolas,monospace;font-size:12.5px;word-break:break-all;
 }
-.overlay .acts{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:6px;}
-.overlay.soft{background:rgba(243,246,251,.94);}
-.overlay .note{margin-top:14px;font-size:12.5px;color:var(--muted);}
-.overlay .primary{background:var(--navy);color:#fff;border:0;padding:11px 20px;border-radius:5px;font-size:14px;font-weight:500;}
-.overlay .primary:hover{background:var(--navy-bright);}
-.overlay .ghost{background:var(--white);color:var(--navy);border:1px solid var(--line);padding:11px 18px;border-radius:5px;font-size:14px;font-weight:500;}
+.overlay .acts{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:8px;}
+.overlay .primary{background:var(--navy);color:#fff;border:0;padding:11px 20px;border-radius:3px;font-size:14px;font-weight:600;}
+.overlay .primary:hover{background:var(--navy-band);}
+.overlay .ghost{background:var(--white);color:var(--navy);border:1px solid var(--line);padding:11px 18px;border-radius:3px;font-size:14px;font-weight:500;}
 .overlay .ghost:hover{border-color:var(--gold);background:var(--gold-wash);}
 .spinner{
   width:28px;height:28px;border:2px solid var(--line);border-top-color:var(--gold);
@@ -185,24 +237,45 @@ footer strong{color:rgba(255,255,255,.85);font-weight:600;}
 }
 @keyframes spin{to{transform:rotate(360deg);}}
 
-/* ---------------- small screens ---------------- */
-@media (max-width:760px){
-  .banner-wrap{height:64px;overflow:hidden;}
-  .banner-wrap img{height:64px;width:100%;object-fit:cover;object-position:center;}
+/* ---------- footer ---------- */
+footer{background:var(--navy-deep);color:rgba(255,255,255,.62);font-size:13px;line-height:1.65;}
+footer .wrap{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:34px;padding:34px 24px 28px;}
+footer h4{font-family:var(--serif);font-size:16px;font-weight:600;color:#fff;margin-bottom:10px;}
+footer address{font-style:normal;}
+footer ul{list-style:none;}
+footer li{padding:3px 0;}
+footer li button{background:none;border:0;font-size:13px;color:rgba(255,255,255,.62);padding:0;text-align:left;}
+footer li button:hover{color:var(--gold);}
+.accred{border-top:1px solid rgba(255,255,255,.14);}
+.accred .wrap{display:block;padding:14px 24px 20px;font-size:12.5px;color:rgba(255,255,255,.5);}
+
+/* ---------- narrow screens ---------- */
+@media (max-width:1000px){
+  .cols{grid-template-columns:1fr;gap:30px;}
+  footer .wrap{grid-template-columns:1fr 1fr;}
+}
+@media (max-width:720px){
   .wrap{padding:0 16px;}
-  .hero-text{padding:2px 0 24px;}
-  .hero-text h2{font-size:23px;}
-  .grid-body{padding:24px 0 44px;}
-  .grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;}
-  .tile{padding:15px 14px 14px;min-height:144px;gap:9px;}
-  .tile::after{width:34px;height:34px;}
-  .tile .ico{width:32px;height:32px;}
-  .tile .nm{font-size:14.5px;padding-right:22px;}
-  .tile .ds{font-size:12px;line-height:1.5;}
-  #crumb{max-width:38vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-  .tb-btn svg + span{display:none;}
-  .tb-btn{padding:8px 11px;}
-  footer .wrap{flex-direction:column;}
+  .banner{height:62px;overflow:hidden;}
+  .banner img{height:62px;width:100%;object-fit:cover;object-position:center;}
+  .utility .wrap{gap:12px;font-size:11.5px;}
+  .utility .hide-sm{display:none;}
+  nav button{padding:12px 14px;font-size:13.5px;}
+  .hero .wrap{padding:30px 16px 32px;}
+  .hero h1{font-size:29px;}
+  .hero p{font-size:14.5px;}
+  .figures .wrap{display:grid;grid-template-columns:repeat(3,1fr);}
+  .fig{padding:14px 10px 14px 0;margin-right:10px;}
+  .fig .n{font-size:22px;}
+  .fig .t{font-size:11.5px;line-height:1.35;}
+  .grid{grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:11px;}
+  .tile{padding:14px 13px 13px;min-height:148px;gap:8px;}
+  .tile::after{width:32px;height:32px;}
+  .tile .ico{width:31px;height:31px;}
+  .tile .nm{font-size:15px;padding-right:20px;}
+  .tile .ds{font-size:12px;}
+  footer .wrap{grid-template-columns:1fr;gap:24px;}
+  .appbar .bbtn span{display:none;}
 }
 @media (prefers-reduced-motion:reduce){
   *{animation-duration:.01ms !important;transition-duration:.01ms !important;}
@@ -211,14 +284,14 @@ footer strong{color:rgba(255,255,255,.85);font-weight:600;}
 </head>
 <body>
 
-<!-- ================= SIGN IN ================= -->
+<!-- ======================= SIGN IN ======================= -->
 <div id="gate">
-  <div class="banner-wrap"><img src="banner.png" alt="Department of Computer Applications, Vignan's Foundation for Science, Technology and Research, School of Computing and Informatics"></div>
-  <div class="gold-rule"></div>
+  <div class="banner"><img src="banner.png" alt="Department of Computer Applications, Vignan's Foundation for Science, Technology and Research, School of Computing and Informatics"></div>
+  <div class="rule-gold"></div>
   <div class="gate-body">
     <div class="gate-card">
       <h1>Department Portal</h1>
-      <p class="hint">Sign in with the department password to reach the department's systems.</p>
+      <p class="sub">For faculty of the Department of Computer Applications. Each system inside keeps its own login.</p>
       <label class="field" for="pw">Department password</label>
       <input id="pw" type="password" autocomplete="current-password" autofocus>
       <button id="signin">Sign in</button>
@@ -227,73 +300,120 @@ footer strong{color:rgba(255,255,255,.85);font-weight:600;}
   </div>
 </div>
 
-<!-- ================= SHELL ================= -->
+<!-- ======================= PORTAL ======================= -->
 <div id="shell">
-  <header>
-    <div class="banner-wrap"><img src="banner.png" alt="Department of Computer Applications, Vignan's Foundation for Science, Technology and Research, School of Computing and Informatics"></div>
-    <div class="gold-rule"></div>
-  </header>
+
+  <div class="utility">
+    <div class="wrap">
+      <span class="hide-sm">Vignan's Foundation for Science, Technology &amp; Research</span>
+      <span class="sp"></span>
+      <span id="util-year"></span>
+      <button id="signout">Sign out</button>
+    </div>
+  </div>
+
+  <header class="banner"><img src="banner.png" alt="Department of Computer Applications, Vignan's Foundation for Science, Technology and Research, School of Computing and Informatics"></header>
+  <div class="rule-gold"></div>
+
+  <nav><div class="wrap" id="nav"></div></nav>
 
   <div class="hero">
     <div class="wrap">
-      <div class="bar">
-        <button class="tb-btn" id="back" hidden>
-          <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3L5 8l5 5"/></svg>
-          <span>All systems</span>
-        </button>
-        <span id="crumb">All systems</span>
-        <span class="spacer"></span>
-        <button class="tb-btn" id="reload" hidden title="Reload this system">
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 8a6 6 0 11-1.8-4.2M14 2v3.5h-3.5"/></svg>
-          <span>Reload</span>
-        </button>
-        <button class="tb-btn" id="signout"><span>Sign out</span></button>
-      </div>
-      <div class="hero-text" id="hero-text">
-        <h2>Department systems</h2>
-        <p>Select a system to open it here. Each one keeps its own records and its own login.</p>
-      </div>
+      <span class="year" id="hero-year"></span>
+      <h1>Department systems<br>of record</h1>
+      <p id="hero-sub">Everything the department runs, reached from one place. Choose a system below to open it here.</p>
     </div>
   </div>
 
-  <div id="grid-view">
-    <div class="grid-body"><div class="wrap"><div id="groups"></div></div></div>
-    <footer>
-      <div class="wrap">
-        <span><strong>Department of Computer Applications</strong> · School of Computing &amp; Informatics</span>
-        <span>Vignan's Foundation for Science, Technology &amp; Research</span>
-      </div>
-    </footer>
-  </div>
+  <div class="figures"><div class="wrap" id="figures"></div></div>
 
-  <div id="app-view">
-    <div class="overlay" id="loading"><div class="box"><div class="spinner"></div><p id="loading-msg">Opening…</p></div></div>
-    <div class="overlay" id="failed">
-      <div class="box">
-        <h4 id="fail-title">This system didn't open</h4>
-        <p id="fail-msg">The address didn't respond.</p>
-        <code class="addr" id="fail-addr"></code>
-        <div class="acts">
-          <button class="primary" id="fail-retry">Try again</button>
-          <button class="ghost" id="fail-direct">Check the address</button>
-          <button class="ghost" id="fail-back" hidden>All systems</button>
+  <main>
+    <div id="grid-view">
+      <div class="wrap">
+        <div class="cols">
+          <div id="areas"></div>
+          <aside>
+            <section>
+              <h3>Notices</h3>
+              <div id="notices"></div>
+            </section>
+            <section>
+              <h3>Open a system</h3>
+              <div class="qlinks" id="qlinks"></div>
+            </section>
+          </aside>
         </div>
       </div>
     </div>
-  </div>
+
+    <div id="app-view">
+      <div class="appbar">
+        <button class="bbtn" id="back">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3L5 8l5 5"/></svg>
+          All systems
+        </button>
+        <span class="ttl" id="crumb"></span>
+        <span class="sp"></span>
+        <button class="bbtn" id="reload">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 8a6 6 0 11-1.8-4.2M14 2v3.5h-3.5"/></svg>
+          <span>Reload</span>
+        </button>
+      </div>
+      <div class="overlay" id="loading"><div class="box"><div class="spinner"></div><p id="loading-msg">Opening</p></div></div>
+      <div class="overlay" id="failed">
+        <div class="box">
+          <h4 id="fail-title"></h4>
+          <p id="fail-msg"></p>
+          <code class="addr" id="fail-addr"></code>
+          <div class="acts">
+            <button class="primary" id="fail-retry">Try again</button>
+            <button class="ghost" id="fail-direct">Check the address</button>
+            <button class="ghost" id="fail-back">All systems</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div>
+        <h4>Department of Computer Applications</h4>
+        <address>
+          School of Computing &amp; Informatics<br>
+          Vignan's Foundation for Science, Technology &amp; Research<br>
+          Vadlamudi, Guntur 522213<br>
+          Andhra Pradesh, India
+        </address>
+      </div>
+      <div>
+        <h4>Systems</h4>
+        <ul id="foot-live"></ul>
+      </div>
+      <div>
+        <h4>Being built</h4>
+        <ul id="foot-planned"></ul>
+      </div>
+    </div>
+    <div class="accred"><div class="wrap">
+      Deemed to be University under Section 3 of the UGC Act 1956. Accredited NAAC A+, with NBA and ABET accredited programmes.
+      This portal is for departmental staff; each system inside holds its own records.
+    </div></div>
+  </footer>
 </div>
 
 <script>
 /* ==========================================================================
-   THE TILES — the only part you normally edit.
+   1. THE TILES
 
-   id      short unique name, no spaces
-   name    the tile heading
-   group   heading it sits under (tiles sharing a group sit together)
-   desc    the sentence on the tile
-   url     the live address, no trailing slash needed
-   icon    calendar | audit | chart | award | students | schedule |
-           report | folder | book | globe
+   id       short unique name, no spaces
+   name     the tile heading
+   group    the area it sits under; tiles sharing a group sit together
+   desc     the sentence on the tile
+   url      the live address
+   icon     calendar | audit | chart | award | students | schedule
+            report | folder | book | globe | news | seal | briefcase
+   planned  planned:true marks it "Being built"; leave the line out once live
    ========================================================================== */
 
 const APPS = [
@@ -316,6 +436,11 @@ const APPS = [
     icon:"chart"
   },
   {
+    id:"nba", name:"NBA", group:"Planning and records",
+    desc:"Accreditation criteria with the evidence filed against each one.",
+    url:"", icon:"seal", planned:true
+  },
+  {
     id:"achievements", name:"Achievements Portal", group:"Students",
     desc:"Students upload and categorise certificates; faculty search any record by registration number.",
     url:"https://ca-achievements-portal-df3e.vercel.app",
@@ -327,13 +452,6 @@ const APPS = [
     url:"https://tallamvyshnavi.github.io/augmented-learning/",
     icon:"students"
   },
-
-  /* ---------------------------------------------------------------------
-     Still to be built. `planned:true` marks the tile "Being built" and shows
-     a clear message instead of an error when someone opens it.
-     When a system goes live: paste its address into url and delete the
-     planned line. Nothing else changes.
-     --------------------------------------------------------------------- */
   {
     id:"attendance", name:"Attendance", group:"Students",
     desc:"Class-wise and subject-wise attendance, with shortage lists and the monthly report.",
@@ -343,11 +461,6 @@ const APPS = [
     id:"placements", name:"Placements", group:"Students",
     desc:"Offers, companies and student-wise placement records for the year.",
     url:"", icon:"briefcase", planned:true
-  },
-  {
-    id:"nba", name:"NBA", group:"Planning and records",
-    desc:"Accreditation criteria with the evidence filed against each one.",
-    url:"", icon:"seal", planned:true
   },
   {
     id:"newsletters", name:"Newsletters", group:"Publications",
@@ -361,7 +474,26 @@ const APPS = [
   }
 ];
 
-/* ======================= nothing below needs editing ====================== */
+/* ==========================================================================
+   2. NOTICES  (sidebar)
+
+   Add a line for anything faculty should see when they open the portal.
+   Newest first. Leave the list empty and the panel says so.
+
+   Example:
+     { date:"12 Oct 2026", text:"Academic audit evidence due by Friday." },
+   ========================================================================== */
+
+const NOTICES = [
+];
+
+/* ==========================================================================
+   3. THE ACADEMIC YEAR shown in the hero and the top strip
+   ========================================================================== */
+
+const YEAR = "2025-26";
+
+/* ===================== nothing below needs editing ====================== */
 
 const ICONS = {
   calendar:'<path d="M3 5h14v12H3zM3 9h14M7 3v3M13 3v3"/>',
@@ -378,72 +510,26 @@ const ICONS = {
   seal:'<path d="M10 2.5l2 1.3 2.4-.2.6 2.3 1.8 1.6-1.2 2.1.3 2.4-2.3.7-1.4 2-2.2-.9-2.2.9-1.4-2-2.3-.7.3-2.4L3.2 7.5 5 5.9l.6-2.3L8 3.8zM7.7 9.9l1.5 1.5 3-3.2"/>',
   briefcase:'<path d="M3 7h14v8.5a1 1 0 01-1 1H4a1 1 0 01-1-1zM7.5 7V5a1 1 0 011-1h3a1 1 0 011 1v2M3 11h14"/>'
 };
-const iconSvg = k => '<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" '
+const iconSvg = k => '<svg width="19" height="19" viewBox="0 0 20 20" fill="none" stroke="currentColor" '
   + 'stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">'
   + (ICONS[k] || '<circle cx="10" cy="10" r="3.2"/>') + '</svg>';
 const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const isUrl = u => /^https?:\/\//i.test(u || "");
 
 const $ = s => document.querySelector(s);
 const gate=$("#gate"), shell=$("#shell");
-const gridView=$("#grid-view"), appView=$("#app-view"), heroText=$("#hero-text");
-const loading=$("#loading"), failed=$("#failed"), stage=$("#app-view");
-const crumb=$("#crumb"), back=$("#back"), reloadBtn=$("#reload");
-let watchdog=null, currentApp=null;
+const gridView=$("#grid-view"), appView=$("#app-view");
+const loading=$("#loading"), failed=$("#failed");
+const crumb=$("#crumb"), reloadBtn=$("#reload");
 
-/* Each system gets its own frame, created once and kept alive. Coming back to a
-   system you've already opened is then instant, and its login survives. */
 const frames = Object.create(null);
-const isUrl = u => /^https?:\/\//i.test(u);
+let watchdog=null, currentApp=null, filter="all";
 
-/* Warm the connection to a system before it's asked for, so the first open is
-   not spent on DNS and TLS. */
-function preconnect(url){
-  try{
-    const o = new URL(url).origin;
-    if(document.querySelector('link[data-pc="'+o+'"]')) return;
-    ["preconnect","dns-prefetch"].forEach(rel=>{
-      const l=document.createElement("link");
-      l.rel=rel; l.href=o; l.crossOrigin=""; l.dataset.pc=o;
-      document.head.appendChild(l);
-    });
-  }catch(e){}
-}
-
-function makeFrame(app){
-  const f=document.createElement("iframe");
-  f.className="appframe";
-  f.title=app.name;
-  f.referrerPolicy="no-referrer-when-downgrade";
-  f.dataset.id=app.id;
-  f.addEventListener("load", ()=>{
-    f.dataset.loaded="1";
-    if(currentApp && currentApp.id===app.id){
-      clearTimeout(watchdog);
-      loading.classList.remove("on");
-      failed.classList.remove("on");
-    }
-  });
-  stage.appendChild(f);
-  f.src=app.url;
-  frames[app.id]=f;
-  return f;
-}
-
-/* Load the remaining systems quietly in the background once the grid is up, so
-   they are already there when someone clicks. Staggered, never all at once. */
-let prewarmed=false;
-function prewarm(){
-  if(prewarmed) return;
-  prewarmed=true;
-  const pending=APPS.filter(a=>!a.planned && isUrl(a.url) && !frames[a.id]);
-  pending.forEach((a,i)=>setTimeout(()=>{ if(!frames[a.id]) makeFrame(a); }, 2500 + i*2000));
-}
-
-/* ---- sign in ---- */
+/* ---------------- sign in ---------------- */
 async function signIn(){
   const btn=$("#signin"), msg=$("#gate-msg"), val=$("#pw").value;
   if(!val){ msg.textContent="Enter the department password."; return; }
-  btn.disabled=true; btn.textContent="Checking…"; msg.textContent="";
+  btn.disabled=true; btn.textContent="Checking"; msg.textContent="";
   try{
     const r=await fetch("/api/login",{
       method:"POST", headers:{"Content-Type":"application/json"},
@@ -463,56 +549,142 @@ $("#signout").addEventListener("click", ()=>{
   sessionStorage.removeItem("ca_portal"); location.reload();
 });
 
-/* ---- build the grid ---- */
-function buildGrid(){
-  const host=$("#groups"); host.innerHTML="";
-  const order=[], byGroup={};
-  APPS.forEach(a=>{
-    const g=a.group || "Department systems";
-    if(!byGroup[g]){ byGroup[g]=[]; order.push(g); }
-    byGroup[g].push(a);
-  });
-  const single = order.length===1;
+/* ---------------- warm the systems before they're asked for ------------- */
+function preconnect(url){
+  try{
+    const o=new URL(url).origin;
+    if(document.querySelector('link[data-pc="'+o+'"]')) return;
+    ["preconnect","dns-prefetch"].forEach(rel=>{
+      const l=document.createElement("link");
+      l.rel=rel; l.href=o; l.crossOrigin=""; l.dataset.pc=o;
+      document.head.appendChild(l);
+    });
+  }catch(e){}
+}
 
-  order.forEach(g=>{
-    if(!single){
-      const h=document.createElement("div");
-      h.className="group-head";
-      h.innerHTML='<span class="dot"></span><h3>'+esc(g)+'</h3><span class="bar-line"></span>';
-      host.appendChild(h);
+function makeFrame(app){
+  const f=document.createElement("iframe");
+  f.className="appframe"; f.title=app.name; f.dataset.id=app.id;
+  f.referrerPolicy="no-referrer-when-downgrade";
+  f.addEventListener("load", ()=>{
+    f.dataset.loaded="1";
+    if(currentApp && currentApp.id===app.id){
+      clearTimeout(watchdog);
+      loading.classList.remove("on");
+      failed.classList.remove("on");
     }
+  });
+  appView.appendChild(f);
+  f.src=app.url;
+  frames[app.id]=f;
+  return f;
+}
+
+let prewarmed=false;
+function prewarm(){
+  if(prewarmed) return;
+  prewarmed=true;
+  APPS.filter(a=>!a.planned && isUrl(a.url) && !frames[a.id])
+      .forEach((a,i)=>setTimeout(()=>{ if(!frames[a.id]) makeFrame(a); }, 2500+i*2000));
+}
+
+/* ---------------- build the page ---------------- */
+function groupsOf(){
+  const order=[], by={};
+  APPS.forEach(a=>{
+    const g=a.group||"Department systems";
+    if(!by[g]){ by[g]=[]; order.push(g); }
+    by[g].push(a);
+  });
+  return {order, by};
+}
+
+function buildNav(){
+  const {order}=groupsOf();
+  const host=$("#nav"); host.innerHTML="";
+  [["all","All systems"]].concat(order.map(g=>[g,g])).forEach(([key,label])=>{
+    const b=document.createElement("button");
+    b.textContent=label; b.dataset.filter=key;
+    b.setAttribute("aria-current", key===filter ? "true":"false");
+    b.addEventListener("click", ()=>{ filter=key; buildNav(); buildAreas(); showGrid(); });
+    host.appendChild(b);
+  });
+}
+
+function buildFigures(){
+  const live=APPS.filter(a=>!a.planned).length;
+  const planned=APPS.filter(a=>a.planned).length;
+  const areas=groupsOf().order.length;
+  $("#figures").innerHTML=
+     fig(live,"Systems running")
+   + fig(planned,"Being built")
+   + fig(areas,"Areas of work");
+  function fig(n,t){ return '<div class="fig"><div class="n">'+n+'</div><div class="t">'+t+'</div></div>'; }
+}
+
+function buildAreas(){
+  const {order,by}=groupsOf();
+  const host=$("#areas"); host.innerHTML="";
+  order.filter(g=>filter==="all"||filter===g).forEach(g=>{
+    const sec=document.createElement("section");
+    sec.className="area";
+    const n=by[g].length;
+    sec.innerHTML='<div class="area-head"><h2>'+esc(g)+'</h2><span class="ln"></span>'
+                 +'<span class="ct">'+n+(n===1?' system':' systems')+'</span></div>';
     const grid=document.createElement("div");
     grid.className="grid";
-    byGroup[g].forEach(a=>{
+    by[g].forEach(a=>{
       const t=document.createElement("button");
-      t.className="tile" + (a.planned ? " planned" : "");
+      t.className="tile"+(a.planned?" planned":"");
       t.dataset.id=a.id;
       t.innerHTML='<span class="ico">'+iconSvg(a.icon)+'</span>'
                  +'<span class="nm">'+esc(a.name)+'</span>'
                  +'<span class="ds">'+esc(a.desc||"")+'</span>'
-                 +(a.planned ? '<span class="chip">Being built</span>' : '');
+                 +(a.planned?'<span class="chip">Being built</span>':'');
       grid.appendChild(t);
     });
-    host.appendChild(grid);
+    sec.appendChild(grid);
+    host.appendChild(sec);
   });
-
-  host.addEventListener("click", e=>{
-    const t=e.target.closest(".tile");
-    if(t) openApp(t.dataset.id);
-  });
-
-  // Touching or hovering a tile starts its frame a moment early.
-  const warm = e => {
-    const t=e.target.closest(".tile");
-    if(!t) return;
-    const a=APPS.find(x=>x.id===t.dataset.id);
-    if(a && !a.planned && isUrl(a.url) && !frames[a.id]) makeFrame(a);
-  };
-  host.addEventListener("pointerenter", warm, true);
-  host.addEventListener("touchstart", warm, {passive:true});
 }
 
-/* ---- open a system, in place ---- */
+function buildSidebar(){
+  const nh=$("#notices");
+  nh.innerHTML = NOTICES.length
+    ? NOTICES.map(n=>'<div class="notice"><div class="d">'+esc(n.date||"")+'</div>'
+        +'<div class="x">'+esc(n.text||"")+'</div></div>').join("")
+    : '<p class="empty">No notices posted.</p>';
+
+  const q=$("#qlinks");
+  q.innerHTML="";
+  APPS.filter(a=>!a.planned).forEach(a=>{
+    const b=document.createElement("button");
+    b.textContent=a.name; b.dataset.id=a.id;
+    q.appendChild(b);
+  });
+}
+
+function buildFooter(){
+  const live=APPS.filter(a=>!a.planned), planned=APPS.filter(a=>a.planned);
+  const li = arr => arr.map(a=>'<li><button data-id="'+a.id+'">'+esc(a.name)+'</button></li>').join("");
+  $("#foot-live").innerHTML=li(live);
+  $("#foot-planned").innerHTML=li(planned);
+}
+
+/* one listener for every tile, quick link and footer link */
+document.addEventListener("click", e=>{
+  const el=e.target.closest("[data-id]");
+  if(el && el.dataset.id) openApp(el.dataset.id);
+});
+/* hovering a tile starts that system a moment early */
+document.addEventListener("pointerenter", e=>{
+  const t=e.target instanceof Element ? e.target.closest(".tile") : null;
+  if(!t) return;
+  const a=APPS.find(x=>x.id===t.dataset.id);
+  if(a && !a.planned && isUrl(a.url) && !frames[a.id]) makeFrame(a);
+}, true);
+
+/* ---------------- open and close ---------------- */
 function openApp(id){
   const app=APPS.find(a=>a.id===id);
   if(!app) return;
@@ -520,24 +692,21 @@ function openApp(id){
   clearTimeout(watchdog);
   gridView.classList.remove("on");
   appView.classList.add("on");
-  shell.classList.add("app-open");
-  heroText.hidden=true;
   failed.classList.remove("on");
   crumb.textContent=app.name;
-  back.hidden=false;
+  document.body.classList.add("viewing");
   history.replaceState(null,"","#"+app.id);
-
+  window.scrollTo(0,0);
   Object.values(frames).forEach(f=>f.classList.remove("on"));
 
   if(app.planned){
     reloadBtn.hidden=true;
     loading.classList.remove("on");
-    showFail(app, app.name + " is being built",
-      "This system is planned for the department portal. Once it is ready its address goes into this tile and it will open here like the rest.",
+    showFail(app, app.name+" is being built",
+      "This system is planned for the portal. Once it is ready its address goes into this tile and it opens here like the rest.",
       "planned");
     return;
   }
-
   if(!isUrl(app.url)){
     reloadBtn.hidden=true;
     loading.classList.remove("on");
@@ -547,27 +716,18 @@ function openApp(id){
   }
 
   reloadBtn.hidden=false;
-  const f = frames[app.id] || makeFrame(app);
+  const f=frames[app.id] || makeFrame(app);
   f.classList.add("on");
+  if(f.dataset.loaded==="1"){ loading.classList.remove("on"); return; }
 
-  if(f.dataset.loaded==="1"){          // already open from before — instant
-    loading.classList.remove("on");
-    return;
-  }
-
-  $("#loading-msg").textContent="Opening \u2026";
+  $("#loading-msg").textContent="Opening";
   loading.classList.add("on");
-
-  /* Nothing is ever thrown away mid-load. At 15 seconds we only change the
-     wording; at 40 we offer a retry, and the frame is still loading behind it,
-     so a slow system that finally arrives simply appears. */
   watchdog=setTimeout(()=>{
     if(currentApp!==app || f.dataset.loaded==="1") return;
-    $("#loading-msg").textContent="Still opening \u2014 this one is waking up\u2026";
+    $("#loading-msg").textContent="Still opening. This one is waking up.";
     watchdog=setTimeout(()=>{
       if(currentApp!==app || f.dataset.loaded==="1") return;
       loading.classList.remove("on");
-      failed.classList.add("soft");
       showFail(app,"This system is slow to answer",
         "It is still loading in the background. Wait a moment longer, or reload it.");
     }, 25000);
@@ -577,24 +737,16 @@ function openApp(id){
 function showGrid(){
   clearTimeout(watchdog);
   appView.classList.remove("on");
-  shell.classList.remove("app-open");
   loading.classList.remove("on");
   failed.classList.remove("on");
-  failed.classList.remove("soft");
   Object.values(frames).forEach(f=>f.classList.remove("on"));
   currentApp=null;
+  document.body.classList.remove("viewing");
   gridView.classList.add("on");
-  heroText.hidden=false;
-  crumb.textContent="All systems";
-  back.hidden=true;
-  reloadBtn.hidden=true;
   history.replaceState(null,"","#");
 }
-back.addEventListener("click", showGrid);
-document.querySelectorAll("#shell .banner-wrap img").forEach(img=>{
-  img.style.cursor="pointer";
-  img.addEventListener("click", showGrid);
-});
+$("#back").addEventListener("click", showGrid);
+$("#fail-back").addEventListener("click", showGrid);
 document.addEventListener("keydown", e=>{
   if(e.key==="Escape" && appView.classList.contains("on")) showGrid();
 });
@@ -610,29 +762,29 @@ reloadBtn.addEventListener("click", reloadCurrent);
 function showFail(app,title,msg,kind){
   clearTimeout(watchdog);
   const planned = kind==="planned";
-  $("#fail-title").textContent = title;
-  $("#fail-msg").textContent = msg;
-  $("#fail-addr").textContent = app.url;
+  $("#fail-title").textContent=title;
+  $("#fail-msg").textContent=msg;
+  $("#fail-addr").textContent=app.url;
   $("#fail-addr").hidden = planned || !app.url;
   $("#fail-retry").hidden = planned;
   $("#fail-direct").hidden = planned || !isUrl(app.url);
   $("#fail-back").hidden = !planned;
   failed.classList.add("on");
 }
-$("#fail-back").addEventListener("click", showGrid);
 $("#fail-retry").addEventListener("click", ()=>{
-  failed.classList.remove("on"); failed.classList.remove("soft");
-  reloadCurrent();
+  failed.classList.remove("on"); reloadCurrent();
 });
 $("#fail-direct").addEventListener("click", ()=>{
   if(currentApp && isUrl(currentApp.url)) window.open(currentApp.url,"_blank","noopener");
 });
 
-/* ---- go ---- */
+/* ---------------- go ---------------- */
 function start(){
   gate.style.display="none";
   shell.classList.add("on");
-  if(!$("#groups").children.length) buildGrid();
+  $("#util-year").textContent="Academic year "+YEAR;
+  $("#hero-year").textContent=YEAR;
+  buildNav(); buildFigures(); buildAreas(); buildSidebar(); buildFooter();
   APPS.forEach(a=>{ if(!a.planned && isUrl(a.url)) preconnect(a.url); });
   const want=location.hash.replace("#","");
   if(want && APPS.some(a=>a.id===want)) openApp(want); else showGrid();
