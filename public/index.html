@@ -32,6 +32,7 @@
   --muted:#55667E;
 
   --wrap:1280px;
+  --appbar:46px;       /* height of the bar above an open system */
   --serif:'Source Serif 4',Georgia,'Times New Roman',serif;
   --sans:'Public Sans',system-ui,-apple-system,sans-serif;
 }
@@ -198,10 +199,14 @@ aside h3{
 /* ---------- a system, open ---------- */
 #app-view{display:none;flex:1;position:relative;min-height:0;background:#fff;}
 #app-view.on{display:block;}
-.appframe{position:absolute;inset:46px 0 0 0;border:0;background:#fff;display:none;}
+.appframe{
+  position:absolute;top:var(--appbar);left:0;
+  width:100%;height:calc(100% - var(--appbar));
+  border:0;background:#fff;display:none;
+}
 .appframe.on{display:block;}
 .appbar{
-  position:absolute;top:0;left:0;right:0;z-index:2;height:46px;
+  position:absolute;top:0;left:0;right:0;z-index:2;height:var(--appbar);
   background:var(--white);border-bottom:1px solid var(--line);
   display:flex;align-items:center;gap:13px;padding:0 18px;
 }
@@ -214,7 +219,7 @@ aside h3{
 }
 .bbtn:hover{border-color:var(--gold);background:var(--gold-wash);}
 .overlay{
-  position:absolute;inset:46px 0 0 0;display:none;
+  position:absolute;inset:var(--appbar) 0 0 0;display:none;
   align-items:center;justify-content:center;padding:30px;background:var(--paper);
 }
 .overlay.on{display:flex;}
