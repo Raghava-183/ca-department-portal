@@ -32,7 +32,6 @@
   --muted:#55667E;
 
   --wrap:1280px;
-  --appbar:46px;       /* height of the bar above an open system */
   --serif:'Source Serif 4',Georgia,'Times New Roman',serif;
   --sans:'Public Sans',system-ui,-apple-system,sans-serif;
 }
@@ -91,9 +90,6 @@ label.field{display:block;font-size:13.5px;font-weight:600;color:var(--navy);mar
 /* while a system is open it gets the whole window below the banner */
 body.viewing #shell{height:100vh;min-height:0;overflow:hidden;}
 body.viewing .hero,body.viewing .figures,body.viewing footer{display:none;}
-/* an open system carries its own banner, so the portal's steps aside;
-   the tab bar stays so you can move between systems */
-body.viewing #shell > .banner{display:none;}
 
 .utility{background:var(--navy-deep);color:rgba(255,255,255,.72);font-size:12.5px;}
 .utility .wrap{display:flex;align-items:center;gap:20px;height:34px;}
@@ -202,14 +198,10 @@ aside h3{
 /* ---------- a system, open ---------- */
 #app-view{display:none;flex:1;position:relative;min-height:0;background:#fff;}
 #app-view.on{display:block;}
-.appframe{
-  position:absolute;top:var(--appbar);left:0;
-  width:100%;height:calc(100% - var(--appbar));
-  border:0;background:#fff;display:none;
-}
+.appframe{position:absolute;inset:46px 0 0 0;border:0;background:#fff;display:none;}
 .appframe.on{display:block;}
 .appbar{
-  position:absolute;top:0;left:0;right:0;z-index:2;height:var(--appbar);
+  position:absolute;top:0;left:0;right:0;z-index:2;height:46px;
   background:var(--white);border-bottom:1px solid var(--line);
   display:flex;align-items:center;gap:13px;padding:0 18px;
 }
@@ -222,7 +214,7 @@ aside h3{
 }
 .bbtn:hover{border-color:var(--gold);background:var(--gold-wash);}
 .overlay{
-  position:absolute;inset:var(--appbar) 0 0 0;display:none;
+  position:absolute;inset:46px 0 0 0;display:none;
   align-items:center;justify-content:center;padding:30px;background:var(--paper);
 }
 .overlay.on{display:flex;}
@@ -256,6 +248,122 @@ footer li button{background:none;border:0;font-size:13px;color:rgba(255,255,255,
 footer li button:hover{color:var(--gold);}
 .accred{border-top:1px solid rgba(255,255,255,.14);}
 .accred .wrap{display:block;padding:14px 24px 20px;font-size:12.5px;color:rgba(255,255,255,.5);}
+
+/* ---------- department stocks ---------- */
+#stocks-view{display:none;}
+#stocks-view.on{display:block;}
+
+.subnav{display:flex;flex-wrap:wrap;gap:8px;padding:28px 0 0;}
+.subnav button{
+  background:var(--white);border:1px solid var(--line);border-radius:3px;
+  padding:9px 15px;font-size:13.5px;font-weight:600;color:var(--navy);
+}
+.subnav button:hover{border-color:var(--gold);background:var(--gold-wash);}
+.subnav button[aria-current="true"]{background:var(--navy);border-color:var(--navy);color:#fff;}
+.subnav button .mark{color:var(--gold);margin-left:5px;}
+
+.panel{background:var(--white);border:1px solid var(--line);border-radius:3px;margin:20px 0 56px;}
+.panel-head{padding:20px 22px 18px;border-bottom:1px solid var(--line);}
+.panel-head .rc{font-size:12.5px;font-weight:700;color:var(--gold-deep);}
+.panel-head h2{font-family:var(--serif);font-size:25px;font-weight:600;color:var(--navy);margin-top:2px;line-height:1.2;}
+.meta{display:flex;flex-wrap:wrap;gap:14px 24px;margin-top:16px;}
+.meta > div{min-width:150px;flex:1;}
+.meta label{display:block;font-size:11.5px;color:var(--muted);margin-bottom:4px;}
+
+.sec{padding:20px 22px;border-bottom:1px solid var(--line-soft);}
+.sec:last-of-type{border-bottom:0;}
+.sec h3{font-family:var(--serif);font-size:17.5px;font-weight:600;color:var(--navy);}
+.sec .note{font-size:12.5px;line-height:1.5;color:var(--muted);margin:4px 0 14px;max-width:72ch;}
+
+.scroll-x{overflow-x:auto;}
+table.rec{width:100%;border-collapse:collapse;font-size:13.5px;}
+table.rec th{
+  text-align:left;font-size:11px;font-weight:700;color:var(--muted);
+  padding:0 8px 7px 0;border-bottom:1px solid var(--line);white-space:nowrap;
+}
+table.rec td{padding:6px 8px 6px 0;border-bottom:1px solid var(--line-soft);vertical-align:middle;}
+table.rec tr:last-child td{border-bottom:0;}
+table.rec td.lbl{font-weight:500;padding-right:16px;}
+
+input.f,select.f{
+  width:100%;padding:7px 9px;font-family:var(--sans);font-size:13.5px;
+  border:1px solid var(--line);border-radius:3px;background:var(--white);color:var(--ink);
+}
+input.f::placeholder{color:#9AA8BC;}
+input.f:focus,select.f:focus{border-color:var(--navy-band);outline:none;box-shadow:0 0 0 2px rgba(18,58,143,.14);}
+input.n{width:86px;text-align:right;}
+select.f[data-status="yes"]{background:#EDF7EF;border-color:#A9D5B4;}
+select.f[data-status="no"]{background:#FCEDEB;border-color:#E6B4AC;}
+select.f[data-status="na"]{background:#F0F3F8;}
+
+.short{font-weight:700;white-space:nowrap;}
+.short.ok{color:#1F7A3A;}
+.short.bad{color:#A4231B;}
+.short.none{color:#9AA8BC;font-weight:400;}
+
+.btn-add{
+  background:none;border:1px dashed var(--line);border-radius:3px;
+  padding:7px 13px;font-size:13px;font-weight:500;color:var(--navy);margin-top:12px;
+}
+.btn-add:hover{border-color:var(--gold);background:var(--gold-wash);}
+.btn-del{background:none;border:0;color:#9AA8BC;padding:3px 6px;font-size:17px;line-height:1;}
+.btn-del:hover{color:#A4231B;}
+
+.savebar{
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  padding:15px 22px;background:var(--paper);border-top:1px solid var(--line);
+}
+.savebar .sp{flex:1;}
+.savebar .who{width:186px;}
+.btn-save{
+  background:var(--navy);color:#fff;border:0;border-radius:3px;
+  padding:10px 22px;font-size:14px;font-weight:600;
+}
+.btn-save:hover{background:var(--navy-band);}
+.btn-save:disabled{opacity:.45;cursor:default;}
+.saved{font-size:12.5px;color:var(--muted);}
+.saved.dirty{color:var(--gold-deep);font-weight:600;}
+.saved.bad{color:#A4231B;font-weight:600;}
+
+table.ovw{width:100%;border-collapse:collapse;font-size:13px;}
+table.ovw th{
+  text-align:left;font-size:11px;font-weight:700;color:var(--muted);
+  padding:0 10px 8px 0;border-bottom:1px solid var(--line);white-space:nowrap;
+}
+table.ovw td{padding:11px 10px 11px 0;border-bottom:1px solid var(--line-soft);white-space:nowrap;}
+table.ovw tr:last-child td{border-bottom:0;}
+table.ovw button.rc{
+  background:none;border:0;padding:0;font-size:13.5px;font-weight:700;color:var(--navy);
+  border-bottom:1px solid transparent;
+}
+table.ovw button.rc:hover{border-bottom-color:var(--gold);}
+table.ovw .nm{color:var(--muted);font-weight:400;}
+.dots{display:flex;gap:4px;}
+.dot{width:12px;height:12px;border-radius:50%;flex:none;}
+.dot.yes{background:#2E8B4F;}
+.dot.no{background:#C0392B;}
+.dot.na{background:#C3CCD9;}
+.dot.un{background:#fff;border:1px solid var(--line);}
+.legend{display:flex;gap:18px;flex-wrap:wrap;margin-top:16px;font-size:12px;color:var(--muted);align-items:center;}
+.legend span{display:flex;align-items:center;gap:6px;}
+
+.stocks-msg{
+  background:var(--white);border:1px solid var(--line);border-radius:3px;
+  margin:20px 0 56px;padding:44px 22px;text-align:center;
+  font-size:14px;line-height:1.6;color:var(--muted);
+}
+.stocks-msg b{display:block;font-family:var(--serif);font-size:19px;font-weight:600;color:var(--navy);margin-bottom:7px;}
+
+@media (max-width:720px){
+  .subnav{padding-top:20px;gap:6px;}
+  .subnav button{padding:8px 12px;font-size:12.5px;}
+  .panel-head{padding:16px;}
+  .panel-head h2{font-size:20px;}
+  .sec{padding:16px;}
+  .savebar{padding:14px 16px;}
+  .savebar .who{width:100%;}
+  table.rec,table.ovw{min-width:620px;}
+}
 
 /* ---------- narrow screens ---------- */
 @media (max-width:1000px){
@@ -328,7 +436,7 @@ footer li button:hover{color:var(--gold);}
   <div class="hero">
     <div class="wrap">
       <span class="year" id="hero-year"></span>
-      <h1>Department systems<br>of record</h1>
+      <h1 id="hero-h">Department systems<br>of record</h1>
       <p id="hero-sub">Everything the department runs, reached from one place. Choose a system below to open it here.</p>
     </div>
   </div>
@@ -351,6 +459,13 @@ footer li button:hover{color:var(--gold);}
             </section>
           </aside>
         </div>
+      </div>
+    </div>
+
+    <div id="stocks-view">
+      <div class="wrap">
+        <div class="subnav" id="roomnav"></div>
+        <div id="stocks-body"></div>
       </div>
     </div>
 
@@ -444,6 +559,11 @@ const APPS = [
     icon:"chart"
   },
   {
+    id:"stocks", name:"Department Stocks", group:"Planning and records",
+    desc:"Stock registers, systems and furniture for each class room, lab and the staff room.",
+    url:"", internal:"stocks", icon:"stock"
+  },
+  {
     id:"nba", name:"NBA", group:"Planning and records",
     desc:"Accreditation criteria with the evidence filed against each one.",
     url:"", icon:"seal", planned:true
@@ -516,7 +636,8 @@ const ICONS = {
   globe:'<path d="M10 3a7 7 0 100 14 7 7 0 000-14zM3 10h14M10 3c2 2.2 2 11.8 0 14M10 3c-2 2.2-2 11.8 0 14"/>',
   news:'<path d="M3 5h11v11H4.5A1.5 1.5 0 013 14.5zM14 8h3v6.5a1.5 1.5 0 01-3 0zM5.5 7.5h6M5.5 10h6M5.5 12.5h4"/>',
   seal:'<path d="M10 2.5l2 1.3 2.4-.2.6 2.3 1.8 1.6-1.2 2.1.3 2.4-2.3.7-1.4 2-2.2-.9-2.2.9-1.4-2-2.3-.7.3-2.4L3.2 7.5 5 5.9l.6-2.3L8 3.8zM7.7 9.9l1.5 1.5 3-3.2"/>',
-  briefcase:'<path d="M3 7h14v8.5a1 1 0 01-1 1H4a1 1 0 01-1-1zM7.5 7V5a1 1 0 011-1h3a1 1 0 011 1v2M3 11h14"/>'
+  briefcase:'<path d="M3 7h14v8.5a1 1 0 01-1 1H4a1 1 0 01-1-1zM7.5 7V5a1 1 0 011-1h3a1 1 0 011 1v2M3 11h14"/>',
+  stock:'<path d="M2.5 6.5L10 3l7.5 3.5L10 10zM2.5 6.5v7L10 17l7.5-3.5v-7M10 10v7"/>'
 };
 const iconSvg = k => '<svg width="19" height="19" viewBox="0 0 20 20" fill="none" stroke="currentColor" '
   + 'stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">'
@@ -531,7 +652,7 @@ const loading=$("#loading"), failed=$("#failed");
 const crumb=$("#crumb"), reloadBtn=$("#reload");
 
 const frames = Object.create(null);
-let watchdog=null, currentApp=null, filter="all";
+let watchdog=null, currentApp=null, filter="all", view="systems";
 
 /* ---------------- sign in ---------------- */
 async function signIn(){
@@ -613,21 +734,49 @@ function buildNav(){
   [["all","All systems"]].concat(order.map(g=>[g,g])).forEach(([key,label])=>{
     const b=document.createElement("button");
     b.textContent=label; b.dataset.filter=key;
-    b.setAttribute("aria-current", key===filter ? "true":"false");
-    b.addEventListener("click", ()=>{ filter=key; buildNav(); buildAreas(); showGrid(); });
+    b.setAttribute("aria-current", (view==="systems" && key===filter) ? "true":"false");
+    b.addEventListener("click", ()=>{
+      view="systems"; filter=key;
+      buildNav(); buildAreas(); setHero(); showGrid();
+    });
     host.appendChild(b);
   });
+  const st=document.createElement("button");
+  st.textContent="Department Stocks";
+  st.setAttribute("aria-current", view==="stocks" ? "true":"false");
+  st.addEventListener("click", ()=>{ view="stocks"; buildNav(); setHero(); showStocks(); });
+  host.appendChild(st);
+}
+
+/* The hero band and the figures say what the current tab is about. */
+function setHero(){
+  if(view==="stocks"){
+    $("#hero-h").textContent="Department stocks";
+    $("#hero-sub").textContent="Registers, equipment and furniture for each room, kept against the department's own records.";
+  }else{
+    $("#hero-h").innerHTML="Department systems<br>of record";
+    $("#hero-sub").textContent="Everything the department runs, reached from one place. Choose a system below to open it here.";
+  }
+  buildFigures();
 }
 
 function buildFigures(){
-  const live=APPS.filter(a=>!a.planned).length;
-  const planned=APPS.filter(a=>a.planned).length;
-  const areas=groupsOf().order.length;
+  const fig=(n,t)=>'<div class="fig"><div class="n">'+n+'</div><div class="t">'+t+'</div></div>';
+  if(view==="stocks"){
+    let systems=0, chairs=0;
+    Object.values(STOCK.rooms).forEach(r=>{
+      (r.systems||[]).forEach(s=>{ systems += Number(s.count)||0; });
+      (r.items||[]).forEach(i=>{ if(/chair/i.test(i.name||"")) chairs += Number(i.present)||0; });
+    });
+    $("#figures").innerHTML = fig(STOCK.order.length||6,"Rooms")
+      + fig(systems,"Systems on record")
+      + fig(chairs,"Chairs verified");
+    return;
+  }
   $("#figures").innerHTML=
-     fig(live,"Systems running")
-   + fig(planned,"Being built")
-   + fig(areas,"Areas of work");
-  function fig(n,t){ return '<div class="fig"><div class="n">'+n+'</div><div class="t">'+t+'</div></div>'; }
+     fig(APPS.filter(a=>!a.planned).length,"Systems running")
+   + fig(APPS.filter(a=>a.planned).length,"Being built")
+   + fig(groupsOf().order.length,"Areas of work");
 }
 
 function buildAreas(){
@@ -696,9 +845,13 @@ document.addEventListener("pointerenter", e=>{
 function openApp(id){
   const app=APPS.find(a=>a.id===id);
   if(!app) return;
+  // Department Stocks is built into the portal, so it switches tab
+  // rather than loading anything in a frame.
+  if(app.internal==="stocks"){ view="stocks"; buildNav(); setHero(); showStocks(); return; }
   currentApp=app;
   clearTimeout(watchdog);
   gridView.classList.remove("on");
+  stocksView.classList.remove("on");
   appView.classList.add("on");
   failed.classList.remove("on");
   crumb.textContent=app.name;
@@ -750,6 +903,8 @@ function showGrid(){
   Object.values(frames).forEach(f=>f.classList.remove("on"));
   currentApp=null;
   document.body.classList.remove("viewing");
+  stocksView.classList.remove("on");
+  if(view!=="systems"){ view="systems"; buildNav(); setHero(); }
   gridView.classList.add("on");
   history.replaceState(null,"","#");
 }
@@ -786,6 +941,394 @@ $("#fail-direct").addEventListener("click", ()=>{
   if(currentApp && isUrl(currentApp.url)) window.open(currentApp.url,"_blank","noopener");
 });
 
+/* ==================== Department Stocks ====================
+   The one tab built inside the portal rather than shown in a frame.
+   Data lives in the portal's own database and is read and written
+   through /api/stocks.
+   ========================================================== */
+
+const STOCK = {
+  loaded:false, loading:false,
+  order:[], registers:[], rooms:{},
+  room:"overview",
+  dirty:new Set(),
+};
+
+const stocksView=$("#stocks-view");
+
+function showStocks(){
+  clearTimeout(watchdog);
+  appView.classList.remove("on");
+  loading.classList.remove("on");
+  failed.classList.remove("on");
+  gridView.classList.remove("on");
+  Object.values(frames).forEach(f=>f.classList.remove("on"));
+  currentApp=null;
+  document.body.classList.remove("viewing");
+  stocksView.classList.add("on");
+  history.replaceState(null,"","#stocks");
+  window.scrollTo(0,0);
+  loadStocks();
+}
+
+async function loadStocks(){
+  if(STOCK.loaded){ renderStocks(); return; }
+  if(STOCK.loading) return;
+  STOCK.loading=true;
+  $("#roomnav").innerHTML="";
+  $("#stocks-body").innerHTML='<div class="stocks-msg">Loading the stock records</div>';
+  try{
+    const r=await fetch("/api/stocks",{credentials:"same-origin"});
+    const d=await r.json().catch(()=>({}));
+    if(!r.ok || !d.ok) throw new Error(d.error || "Could not load the stock records.");
+    STOCK.order=d.order||[]; STOCK.registers=d.registers||[]; STOCK.rooms=d.rooms||{};
+    STOCK.loaded=true;
+  }catch(e){
+    STOCK.loading=false;
+    $("#stocks-body").innerHTML='<div class="stocks-msg"><b>The stock records could not be loaded</b>'
+      + esc(String(e.message||e)) + '</div>';
+    return;
+  }
+  STOCK.loading=false;
+  buildFigures();
+  renderStocks();
+}
+
+/* ---------------- small builders ---------------- */
+const SA = (path,val)=>' data-path="'+path+'" value="'+esc(val==null?"":val)+'"';
+function txt(path,val,ph){
+  return '<input class="f" type="text"'+SA(path,val)+' placeholder="'+esc(ph||"")+'">';
+}
+function num(path,val){
+  return '<input class="f n" type="number" min="0" step="1" data-kind="num"'+SA(path,val)+'>';
+}
+function sel(path,val){
+  const v=String(val||"");
+  const o=(k,l)=>'<option value="'+k+'"'+(v===k?' selected':'')+'>'+l+'</option>';
+  return '<select class="f" data-status="'+esc(v)+'" data-path="'+path+'">'
+       + o("","Not set") + o("yes","Yes") + o("no","No") + o("na","N/A") + '</select>';
+}
+function delBtn(kind,i){
+  return '<button class="btn-del" data-del="'+kind+'" data-i="'+i+'" title="Remove this line">&times;</button>';
+}
+function metaField(label,path,val,ph){
+  return '<div><label>'+esc(label)+'</label>'+txt(path,val,ph)+'</div>';
+}
+function shortfall(it){
+  const a=it.register, b=it.present;
+  if(a==null||b==null||a===""||b==="") return {cls:"none",text:"—"};
+  const d=Number(a)-Number(b);
+  if(!Number.isFinite(d)) return {cls:"none",text:"—"};
+  if(d===0) return {cls:"ok",text:"Tallies"};
+  if(d>0)  return {cls:"bad",text:d+" short"};
+  return {cls:"ok",text:Math.abs(d)+" extra"};
+}
+
+/* ---------------- room buttons ---------------- */
+function buildRoomNav(){
+  const h=$("#roomnav"); h.innerHTML="";
+  const mk=(key,label)=>{
+    const b=document.createElement("button");
+    b.dataset.room=key;
+    b.innerHTML=esc(label)+(STOCK.dirty.has(key)?'<span class="mark">•</span>':'');
+    b.setAttribute("aria-current", STOCK.room===key?"true":"false");
+    b.addEventListener("click", ()=>{
+      keepEdits();
+      STOCK.room=key;
+      renderStocks();
+      window.scrollTo(0,0);
+    });
+    h.appendChild(b);
+  };
+  mk("overview","Overview");
+  STOCK.order.forEach(c=>mk(c,c));
+}
+
+/* ---------------- overview ---------------- */
+function renderOverview(){
+  const regs=STOCK.registers;
+  const head='<tr><th>Room</th><th>Systems</th><th>Chairs</th>'
+    +'<th>Registers in place</th><th>Last verified</th><th>Last saved</th></tr>';
+
+  const rows=STOCK.order.map(code=>{
+    const r=STOCK.rooms[code]||{};
+    const sys=(r.systems||[]).reduce((t,s)=>t+(Number(s.count)||0),0);
+    const chair=(r.items||[]).find(i=>/chair/i.test(i.name||""));
+    const chairTxt = chair && chair.present!=null && chair.present!==""
+      ? esc(chair.present)+(chair.register!=null&&chair.register!==""?" of "+esc(chair.register):"")
+      : '<span class="nm">not recorded</span>';
+    const dots=regs.map(([k,label])=>{
+      const st=((r.registers||{})[k]||{}).status||"";
+      const cls={yes:"yes",no:"no",na:"na"}[st]||"un";
+      return '<span class="dot '+cls+'" title="'+esc(label)+': '
+        +({yes:"Yes",no:"No",na:"N/A"}[st]||"Not set")+'"></span>';
+    }).join("");
+    const yes=regs.filter(([k])=>(((r.registers||{})[k]||{}).status)==="yes").length;
+    const ver=(r.verification||{}).date;
+    const saved=r._updated_at ? new Date(r._updated_at).toLocaleDateString("en-GB",
+      {day:"numeric",month:"short",year:"numeric"}) : "—";
+
+    return '<tr>'
+      + '<td><button class="rc" data-room="'+esc(code)+'">'+esc(code)+'</button><br>'
+      +     '<span class="nm">'+esc((r.meta||{}).name||"")+'</span></td>'
+      + '<td>'+(sys||'<span class="nm">—</span>')+'</td>'
+      + '<td>'+chairTxt+'</td>'
+      + '<td><div class="dots">'+dots+'</div>'
+      +     '<span class="nm">'+yes+' of '+regs.length+'</span></td>'
+      + '<td>'+(ver?esc(ver):'<span class="nm">not recorded</span>')+'</td>'
+      + '<td><span class="nm">'+saved+'</span></td>'
+      + '</tr>';
+  }).join("");
+
+  const legend='<div class="legend">'
+    +'<span><i class="dot yes"></i>In place</span>'
+    +'<span><i class="dot no"></i>Not in place</span>'
+    +'<span><i class="dot na"></i>Not applicable</span>'
+    +'<span><i class="dot un"></i>Not recorded</span>'
+    +'<span>Hover a dot to see which register it is.</span></div>';
+
+  $("#stocks-body").innerHTML =
+    '<div class="panel">'
+    + '<div class="panel-head"><div class="rc">All rooms</div>'
+    +   '<h2>Stock position across the department</h2></div>'
+    + '<div class="sec"><p class="note">One row per room. The seven dots are the registers in the order they appear on a room page. Choose a room code to open and edit it.</p>'
+    +   '<div class="scroll-x"><table class="ovw">'+head+rows+'</table></div>'
+    +   legend
+    + '</div></div>';
+
+  $("#stocks-body").querySelectorAll("button.rc").forEach(b=>{
+    b.addEventListener("click", ()=>{
+      keepEdits(); STOCK.room=b.dataset.room; renderStocks(); window.scrollTo(0,0);
+    });
+  });
+}
+
+/* ---------------- one room ---------------- */
+function renderRoom(code){
+  const r=STOCK.rooms[code]||{};
+  const m=r.meta||{}, regs=r.registers||{}, ver=r.verification||{};
+  const sys=r.systems||[], items=r.items||[];
+
+  const head='<div class="panel-head">'
+    + '<div class="rc">'+esc(code)+'</div>'
+    + '<h2>'+esc(m.name||"Room")+'</h2>'
+    + '<div class="meta">'
+    +   metaField("Room type","meta.type",m.type,"Class room cum lab")
+    +   metaField("In-charge","meta.incharge",m.incharge,"Faculty name")
+    +   metaField("Seating capacity","meta.capacity",m.capacity,"e.g. 60")
+    +   metaField("Established","meta.established",m.established,"Year")
+    + '</div></div>';
+
+  const regRows=STOCK.registers.map(([key,label])=>{
+    const g=regs[key]||{};
+    return '<tr><td class="lbl">'+esc(label)+'</td>'
+      +'<td style="width:118px">'+sel("registers."+key+".status",g.status)+'</td>'
+      +'<td style="width:140px">'+txt("registers."+key+".updated",g.updated,"Last entry")+'</td>'
+      +'<td>'+txt("registers."+key+".remarks",g.remarks,"Remarks")+'</td></tr>';
+  }).join("");
+
+  const regSec='<div class="sec"><h3>Registers</h3>'
+    +'<p class="note">Whether each register exists, when it was last written in, and anything an auditor should know. A date against "Yes" is what makes it hold up.</p>'
+    +'<div class="scroll-x"><table class="rec">'
+    +'<tr><th>Register</th><th>Status</th><th>Last entry</th><th>Remarks</th></tr>'
+    + regRows + '</table></div></div>';
+
+  const sysRows=sys.map((s,i)=>
+    '<tr><td style="width:24%">'+txt("systems."+i+".label",s.label,"What it is")+'</td>'
+    +'<td style="width:96px">'+num("systems."+i+".count",s.count)+'</td>'
+    +'<td>'+txt("systems."+i+".spec",s.spec,"Processor, RAM, storage, monitor")+'</td>'
+    +'<td style="width:34px">'+delBtn("systems",i)+'</td></tr>').join("");
+
+  const sysSec='<div class="sec"><h3>Computer systems</h3>'
+    +'<p class="note">One line per kind of machine. Keep different specifications on separate lines so the counts stay meaningful.</p>'
+    +'<div class="scroll-x"><table class="rec">'
+    +'<tr><th>Description</th><th>Count</th><th>Specification</th><th></th></tr>'
+    + (sysRows || '<tr><td colspan="4" style="color:#9AA8BC">No systems recorded for this room.</td></tr>')
+    +'</table></div>'
+    +'<button class="btn-add" data-add="systems">Add a line</button></div>';
+
+  const itemRows=items.map((it,i)=>{
+    const sh=shortfall(it);
+    return '<tr><td style="width:28%">'+txt("items."+i+".name",it.name,"Item")+'</td>'
+      +'<td>'+num("items."+i+".register",it.register)+'</td>'
+      +'<td>'+num("items."+i+".present",it.present)+'</td>'
+      +'<td>'+num("items."+i+".working",it.working)+'</td>'
+      +'<td>'+num("items."+i+".damaged",it.damaged)+'</td>'
+      +'<td class="short '+sh.cls+'" data-short="'+i+'">'+sh.text+'</td>'
+      +'<td style="width:34px">'+delBtn("items",i)+'</td></tr>';
+  }).join("");
+
+  const itemSec='<div class="sec"><h3>Furniture and fittings</h3>'
+    +'<p class="note">Chairs, tables and fittings. Record what the stock register says and what is actually in the room; the last column works out the difference. Leave a box empty rather than guessing.</p>'
+    +'<div class="scroll-x"><table class="rec">'
+    +'<tr><th>Item</th><th>As per register</th><th>Present</th><th>Working</th><th>Damaged</th><th>Difference</th><th></th></tr>'
+    + (itemRows || '<tr><td colspan="7" style="color:#9AA8BC">No items recorded for this room.</td></tr>')
+    +'</table></div>'
+    +'<button class="btn-add" data-add="items">Add an item</button></div>';
+
+  const verSec='<div class="sec"><h3>Physical verification</h3>'
+    +'<p class="note">The last time somebody walked the room and counted.</p>'
+    +'<div class="meta" style="margin-top:0">'
+    + metaField("Verified on","verification.date",ver.date,"e.g. 14 Oct 2026")
+    + metaField("Verified by","verification.by",ver.by,"Faculty name")
+    +'</div></div>';
+
+  let who=""; try{ who=localStorage.getItem("ca_stock_by")||""; }catch(e){}
+  const savedTxt = r._updated_at
+    ? "Last saved "+new Date(r._updated_at).toLocaleString("en-GB",
+        {day:"numeric",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"})
+      + (r._updated_by ? " by "+r._updated_by : "")
+    : "Not saved yet.";
+
+  const bar='<div class="savebar">'
+    +'<span class="saved" id="saved-note">'+esc(savedTxt)+'</span>'
+    +'<span class="sp"></span>'
+    +'<input class="f who" id="save-by" type="text" placeholder="Your name" value="'+esc(who)+'">'
+    +'<button class="btn-save" id="save-room">Save changes</button>'
+    +'</div>';
+
+  $("#stocks-body").innerHTML='<div class="panel" id="room-panel">'
+    + head + regSec + sysSec + itemSec + verSec + bar + '</div>';
+
+  wireRoom(code);
+}
+
+/* ---------------- wiring ---------------- */
+function wireRoom(code){
+  const panel=$("#room-panel");
+  if(!panel) return;
+
+  panel.addEventListener("input", e=>{
+    const el=e.target;
+    if(el.tagName==="SELECT") el.dataset.status=el.value;
+    if(el.dataset && el.dataset.path && el.dataset.path.startsWith("items.")){
+      const i=el.dataset.path.split(".")[1];
+      const cell=panel.querySelector('[data-short="'+i+'"]');
+      if(cell){
+        const g=k=>{
+          const f=panel.querySelector('[data-path="items.'+i+'.'+k+'"]');
+          return f && f.value!=="" ? Number(f.value) : null;
+        };
+        const sh=shortfall({register:g("register"),present:g("present")});
+        cell.className="short "+sh.cls; cell.textContent=sh.text;
+      }
+    }
+    markDirty(code);
+  });
+  panel.addEventListener("change", e=>{
+    if(e.target.tagName==="SELECT") e.target.dataset.status=e.target.value;
+  });
+
+  panel.querySelectorAll("[data-add]").forEach(b=>{
+    b.addEventListener("click", ()=>{
+      keepEdits();
+      const kind=b.dataset.add;
+      const room=STOCK.rooms[code];
+      if(!Array.isArray(room[kind])) room[kind]=[];
+      room[kind].push(kind==="systems"
+        ? {label:"",count:null,spec:""}
+        : {name:"",register:null,present:null,working:null,damaged:null});
+      markDirty(code);
+      renderStocks();
+    });
+  });
+
+  panel.querySelectorAll("[data-del]").forEach(b=>{
+    b.addEventListener("click", ()=>{
+      keepEdits();
+      const kind=b.dataset.del, i=Number(b.dataset.i);
+      const room=STOCK.rooms[code];
+      if(Array.isArray(room[kind])) room[kind].splice(i,1);
+      markDirty(code);
+      renderStocks();
+    });
+  });
+
+  $("#save-room").addEventListener("click", ()=>saveRoom(code));
+}
+
+function markDirty(code){
+  if(STOCK.dirty.has(code)) return;
+  STOCK.dirty.add(code);
+  const n=$("#saved-note");
+  if(n){ n.classList.add("dirty"); n.textContent="Unsaved changes"; }
+  buildRoomNav();
+}
+
+/* Pulls whatever is typed in the panel back into STOCK.rooms, so moving
+   between rooms never loses work. */
+function keepEdits(){
+  const panel=$("#room-panel");
+  if(!panel) return;
+  const code=STOCK.room;
+  const room=STOCK.rooms[code];
+  if(!room) return;
+  panel.querySelectorAll("[data-path]").forEach(el=>{
+    const v = el.dataset.kind==="num"
+      ? (el.value==="" ? null : Number(el.value))
+      : el.value;
+    setPath(room, el.dataset.path, v);
+  });
+}
+
+function setPath(obj,path,val){
+  const parts=path.split(".");
+  let cur=obj;
+  for(let i=0;i<parts.length-1;i++){
+    const k=parts[i], next=parts[i+1];
+    if(cur[k]==null||typeof cur[k]!=="object") cur[k] = /^\d+$/.test(next) ? [] : {};
+    cur=cur[k];
+  }
+  cur[parts[parts.length-1]]=val;
+}
+
+async function saveRoom(code){
+  keepEdits();
+  const btn=$("#save-room"), note=$("#saved-note");
+  const by=($("#save-by").value||"").trim();
+  try{ localStorage.setItem("ca_stock_by",by); }catch(e){}
+
+  const data=JSON.parse(JSON.stringify(STOCK.rooms[code]||{}));
+  delete data._updated_at; delete data._updated_by;
+  data.systems=(data.systems||[]).filter(s=>(s.label||"").trim()||s.count!=null);
+  data.items=(data.items||[]).filter(i=>(i.name||"").trim());
+
+  btn.disabled=true; btn.textContent="Saving";
+  note.className="saved"; note.textContent="Saving changes";
+  try{
+    const r=await fetch("/api/stocks",{
+      method:"POST", credentials:"same-origin",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({code,data,by})
+    });
+    const d=await r.json().catch(()=>({}));
+    if(r.status===401) throw new Error("Your session has expired. Sign out and sign in again, then save.");
+    if(!r.ok||!d.ok) throw new Error(d.error||"The changes could not be saved.");
+    STOCK.rooms[code]={...data,_updated_at:d.updated_at,_updated_by:d.updated_by};
+    STOCK.dirty.delete(code);
+    note.className="saved";
+    note.textContent="Last saved "+new Date(d.updated_at).toLocaleString("en-GB",
+      {day:"numeric",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"})
+      + (d.updated_by ? " by "+d.updated_by : "");
+    buildRoomNav(); buildFigures();
+  }catch(e){
+    note.className="saved bad";
+    note.textContent=String(e.message||e);
+  }
+  btn.disabled=false; btn.textContent="Save changes";
+}
+
+function renderStocks(){
+  buildRoomNav();
+  if(STOCK.room==="overview") renderOverview();
+  else renderRoom(STOCK.room);
+}
+
+window.addEventListener("beforeunload", e=>{
+  keepEdits();
+  if(STOCK.dirty.size){ e.preventDefault(); e.returnValue=""; }
+});
+
 /* ---------------- go ---------------- */
 function start(){
   gate.style.display="none";
@@ -795,7 +1338,9 @@ function start(){
   buildNav(); buildFigures(); buildAreas(); buildSidebar(); buildFooter();
   APPS.forEach(a=>{ if(!a.planned && isUrl(a.url)) preconnect(a.url); });
   const want=location.hash.replace("#","");
-  if(want && APPS.some(a=>a.id===want)) openApp(want); else showGrid();
+  if(want==="stocks"){ view="stocks"; buildNav(); setHero(); showStocks(); }
+  else if(want && APPS.some(a=>a.id===want)) openApp(want);
+  else showGrid();
   prewarm();
 }
 if(sessionStorage.getItem("ca_portal")==="1") start();

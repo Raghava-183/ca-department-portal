@@ -11,7 +11,11 @@ ca-portal/
 │   ├── banner.png      the department banner
 │   └── hero.jpg        the campus photograph behind the hero band
 ├── api/
-│   └── login.js        checks the department password
+│   ├── login.js        checks the department password, starts a session
+│   ├── _session.js     signs and verifies the session cookie
+│   ├── _rooms.js       the rooms, and their starting data from the DDH deck
+│   └── stocks.js       reads and saves the stock records
+├── package.json
 ├── vercel.json
 └── README.md
 ```
@@ -32,6 +36,7 @@ ca-portal/
 | Placements | Students | being built |
 | Newsletters | Publications | being built |
 | Magazines | Publications | being built |
+| Department Stocks | Planning and records | built into this portal |
 
 ---
 
@@ -48,12 +53,34 @@ git push
 Vercel rebuilds on its own in about a minute. Then press **Ctrl + Shift + R** on
 the portal so the browser fetches the new version rather than its cached copy.
 
-### The password
+### Environment variables
 
-It is not in the code. It lives in Vercel under **Settings → Environment
-Variables** as `PORTAL_PASSWORD`. To change it, edit that value, then go to
-**Deployments**, open the **⋯** menu on the newest one and choose **Redeploy** —
-the new password only takes effect after that redeploy.
+Two, both under **Settings → Environment Variables** in Vercel:
+
+| Name | What it is |
+|---|---|
+| `PORTAL_PASSWORD` | the department password |
+| `DATABASE_URL` | the Neon connection string the Stocks page saves into |
+
+To change the password, edit that value, then go to **Deployments**, open the
+**⋯** menu on the newest one and choose **Redeploy** — it only takes effect
+after that redeploy. Changing it also signs everyone out, because the session
+cookie is signed with it.
+
+### Setting up the database, once
+
+The Stocks page is the only part that stores anything. It needs a Neon database.
+
+1. At <https://neon.tech> create a project. The free tier is ample — the whole
+   dataset is a few kilobytes. Pick the region nearest Guntur.
+2. Copy the **pooled** connection string: it starts `postgresql://` and has
+   `-pooler` in the host name. The pooled one is the right choice for Vercel.
+3. In Vercel add it as `DATABASE_URL`, then redeploy.
+4. Open the Stocks tab. The table is created and filled from `api/_rooms.js`
+   on first use, so there is nothing to run by hand.
+
+Until `DATABASE_URL` is set, every other tab works as before and the Stocks tab
+says the records could not be loaded.
 
 ---
 
@@ -101,6 +128,49 @@ Leave the list empty and the panel says so.
 Replace the file, keep the name, and it changes in both places. A wide landscape
 image works best; it is dimmed under a navy wash, so detail in the shadows is
 lost by design. `public/banner.png` is the department banner across the top.
+
+---
+
+## Department Stocks
+
+The one tab built inside the portal rather than shown in a frame, so it has no
+embedding header to fight and no separate login. It opens from the navigation
+band or from its tile under Planning and records.
+
+**Overview** is a row per room: systems, chairs, seven dots for the seven
+registers, and when the room was last verified and last saved. It is the view to
+put in front of a DDH or NBA reviewer.
+
+**Each room** has four sections. *Registers* — whether each of the seven exists,
+when it was last written in, and remarks. *Computer systems* — one line per kind
+of machine. *Furniture and fittings* — per item, what the stock register says,
+what is physically present, how many work and how many are damaged, with the
+difference worked out for you. *Physical verification* — when the room was last
+counted, and by whom.
+
+Anything typed is kept while you move between rooms, and a dot stays on a room
+button until you save it. The name in the save bar is recorded against the entry
+and remembered on that computer.
+
+### Where the starting data came from
+
+`api/_rooms.js` holds what the DDH deck of 14 October 2026 recorded for the five
+labs. That file only seeds an **empty** database the first time. After that the
+database is the record, and editing the file changes nothing you can see.
+
+Three things the deck did not contain, left blank to be filled in:
+
+- **AFTF-04** is not in the deck at all. It is set up here as the staff room,
+  with no registers recorded.
+- **No furniture anywhere.** The deck counts computer systems only, so every
+  chair, table and fitting starts empty.
+- **No in-charge, seating capacity or verification dates** for any room.
+
+### Adding a room later
+
+Add it to `SEED` and to `ORDER` in `api/_rooms.js`, then push. A room with no
+row in the database yet is seeded on the next load, so rooms already there are
+never overwritten.
 
 ---
 

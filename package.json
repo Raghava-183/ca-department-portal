@@ -1,0 +1,9 @@
+{
+  "name": "ca-department-portal",
+  "version": "1.0.0",
+  "private": true,
+  "type": "commonjs",
+  "dependencies": {
+    "@neondatabase/serverless": "1.1.0"
+  }
+}

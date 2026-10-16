@@ -1,6 +1,9 @@
-// Checks the department password.
+// Checks the department password and starts a session.
+//
 // The password itself is never in this file or in the web page. It lives in
 // Vercel under Settings > Environment Variables, as PORTAL_PASSWORD.
+
+const session = require('./_session.js');
 
 module.exports = async (req, res) => {
   if (req.method !== 'POST') {
@@ -24,6 +27,8 @@ module.exports = async (req, res) => {
   await new Promise(r => setTimeout(r, 400));
 
   if (given.length === expected.length && given === expected) {
+    // The session cookie is what lets the Stocks page save changes.
+    session.issue(res);
     res.status(200).json({ ok: true });
   } else {
     res.status(401).json({ ok: false, error: "That password didn't work. Try again." });
