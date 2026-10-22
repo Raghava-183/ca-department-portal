@@ -94,7 +94,9 @@ body.viewing .hero,body.viewing .figures,body.viewing footer{display:none;}
    two stacked. Drop it while a system is open; the navy navigation band
    keeps the portal's identity and the system gets the space. */
 body.viewing #shell > header.banner,
-body.viewing #shell > .rule-gold{display:none;}
+body.viewing #shell > .rule-gold,
+body.viewing #shell > .utility,
+body.viewing #shell > nav{display:none;}
 
 .utility{background:var(--navy-deep);color:rgba(255,255,255,.72);font-size:12.5px;}
 .utility .wrap{display:flex;align-items:center;gap:20px;height:34px;}
@@ -211,17 +213,17 @@ aside h3{
 .appframe.on{display:block;}
 .appbar{
   position:absolute;top:0;left:0;right:0;z-index:2;height:46px;
-  background:var(--white);border-bottom:1px solid var(--line);
+  background:var(--navy);border-bottom:2px solid var(--gold);
   display:flex;align-items:center;gap:13px;padding:0 18px;
 }
 .appbar .sp{flex:1;}
-.appbar .ttl{font-family:var(--serif);font-size:16px;font-weight:600;color:var(--navy);}
+.appbar .ttl{font-family:var(--serif);font-size:16px;font-weight:600;color:#fff;}
 .bbtn{
-  background:var(--white);border:1px solid var(--line);border-radius:3px;
-  padding:6px 12px;font-size:13px;font-weight:500;color:var(--navy);
+  background:transparent;border:1px solid rgba(255,255,255,.32);border-radius:3px;
+  padding:6px 12px;font-size:13px;font-weight:500;color:#fff;
   display:inline-flex;align-items:center;gap:6px;
 }
-.bbtn:hover{border-color:var(--gold);background:var(--gold-wash);}
+.bbtn:hover{border-color:var(--gold);color:var(--gold);background:rgba(255,255,255,.07);}
 .overlay{
   position:absolute;inset:46px 0 0 0;display:none;
   align-items:center;justify-content:center;padding:30px;background:var(--paper);
