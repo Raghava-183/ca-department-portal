@@ -198,7 +198,11 @@ aside h3{
 /* ---------- a system, open ---------- */
 #app-view{display:none;flex:1;position:relative;min-height:0;background:#fff;}
 #app-view.on{display:block;}
-.appframe{position:absolute;inset:46px 0 0 0;border:0;background:#fff;display:none;}
+/* An iframe is a replaced element: with width:auto, left:0 and right:0
+   over-constrain it and the browser falls back to the intrinsic 300x150.
+   The width and height below are what actually stretch it. */
+.appframe{position:absolute;top:46px;left:0;right:0;bottom:0;
+  width:100%;height:calc(100% - 46px);border:0;background:#fff;display:none;}
 .appframe.on{display:block;}
 .appbar{
   position:absolute;top:0;left:0;right:0;z-index:2;height:46px;
