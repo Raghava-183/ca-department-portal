@@ -90,6 +90,11 @@ label.field{display:block;font-size:13.5px;font-weight:600;color:var(--navy);mar
 /* while a system is open it gets the whole window below the banner */
 body.viewing #shell{height:100vh;min-height:0;overflow:hidden;}
 body.viewing .hero,body.viewing .figures,body.viewing footer{display:none;}
+/* Each embedded system carries its own Vignan banner, so ours would make
+   two stacked. Drop it while a system is open; the navy navigation band
+   keeps the portal's identity and the system gets the space. */
+body.viewing #shell > header.banner,
+body.viewing #shell > .rule-gold{display:none;}
 
 .utility{background:var(--navy-deep);color:rgba(255,255,255,.72);font-size:12.5px;}
 .utility .wrap{display:flex;align-items:center;gap:20px;height:34px;}
