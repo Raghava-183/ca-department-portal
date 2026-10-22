@@ -102,6 +102,7 @@ body.viewing #shell > nav{display:none;}
 .utility .wrap{display:flex;align-items:center;gap:20px;height:34px;}
 .utility .sp{flex:1;}
 .utility b{color:#fff;font-weight:600;}
+#util-build{color:rgba(255,255,255,.4);font-size:11.5px;}
 #signout{
   background:none;border:0;color:rgba(255,255,255,.72);
   font-size:12.5px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.35);
@@ -435,6 +436,7 @@ table.ovw .nm{color:var(--muted);font-weight:400;}
       <span class="hide-sm">Vignan's Foundation for Science, Technology &amp; Research</span>
       <span class="sp"></span>
       <span id="util-year"></span>
+      <span id="util-build"></span>
       <button id="signout">Sign out</button>
     </div>
   </div>
@@ -631,6 +633,11 @@ const NOTICES = [
    ========================================================================== */
 
 const YEAR = "2025-26";
+
+/* Bump this whenever you push. The portal shows it in the top strip, so you
+   can tell at a glance whether the version you are looking at is the one you
+   just deployed. */
+const BUILD = "build 7";
 
 /* ===================== nothing below needs editing ====================== */
 
@@ -1345,6 +1352,7 @@ function start(){
   gate.style.display="none";
   shell.classList.add("on");
   $("#util-year").textContent="Academic year "+YEAR;
+  $("#util-build").textContent=BUILD;
   $("#hero-year").textContent=YEAR;
   buildNav(); buildFigures(); buildAreas(); buildSidebar(); buildFooter();
   APPS.forEach(a=>{ if(!a.planned && isUrl(a.url)) preconnect(a.url); });
