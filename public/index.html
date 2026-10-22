@@ -98,6 +98,15 @@ body.viewing #shell > .rule-gold,
 body.viewing #shell > .utility,
 body.viewing #shell > nav{display:none;}
 
+/* An open system is pinned to the browser window itself, not to whatever
+   happens to be laid out around it. Nothing in the page can narrow it. */
+body.viewing #app-view{
+  position:fixed;inset:0;z-index:40;background:#fff;
+}
+body.viewing .appframe{
+  top:46px;left:0;width:100%;height:calc(100% - 46px);
+}
+
 .utility{background:var(--navy-deep);color:rgba(255,255,255,.72);font-size:12.5px;}
 .utility .wrap{display:flex;align-items:center;gap:20px;height:34px;}
 .utility .sp{flex:1;}
@@ -637,7 +646,7 @@ const YEAR = "2025-26";
 /* Bump this whenever you push. The portal shows it in the top strip, so you
    can tell at a glance whether the version you are looking at is the one you
    just deployed. */
-const BUILD = "build 7";
+const BUILD = "build 8";
 
 /* ===================== nothing below needs editing ====================== */
 
