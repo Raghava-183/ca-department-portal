@@ -81,6 +81,16 @@ function clean(input) {
       working:  num(i && i.working),
       damaged:  num(i && i.damaged),
     })),
+    photos: (Array.isArray(src.photos) ? src.photos : []).slice(0, 60).map(p => ({
+      url:     str(p && p.url, 600),
+      caption: str(p && p.caption, 160),
+      at:      str(p && p.at, 40),
+    })).filter(p => /^https:\/\//i.test(p.url)),
+    proofs: (Array.isArray(src.proofs) ? src.proofs : []).slice(0, 40).map(p => ({
+      label: str(p && p.label, 120),
+      url:   str(p && p.url, 600),
+      note:  str(p && p.note, 300),
+    })).filter(p => p.label || p.url),
     verification: {
       date: str((src.verification || {}).date, 40),
       by:   str((src.verification || {}).by, 120),

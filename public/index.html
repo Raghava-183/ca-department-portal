@@ -386,6 +386,68 @@ table.ovw .nm{color:var(--muted);font-weight:400;}
   table.rec,table.ovw{min-width:620px;}
 }
 
+/* ---------- room tabs, gallery, proofs ---------- */
+.roomtabs{display:flex;flex-wrap:wrap;gap:0;padding:0 22px;background:var(--white);
+  border-bottom:1px solid var(--line);}
+.roomtabs button{
+  background:none;border:0;padding:12px 15px;font-size:13.5px;font-weight:500;
+  color:var(--muted);border-bottom:3px solid transparent;white-space:nowrap;
+}
+.roomtabs button:hover{color:var(--navy);background:var(--gold-wash);}
+.roomtabs button[aria-current="true"]{color:var(--navy);font-weight:700;border-bottom-color:var(--gold);}
+.roomtabs .n{
+  display:inline-block;margin-left:6px;padding:1px 6px;border-radius:9px;
+  background:var(--line-soft);color:var(--muted);font-size:11px;font-weight:700;
+}
+.roomtabs button[aria-current="true"] .n{background:var(--navy);color:#fff;}
+.sec[hidden]{display:none;}
+
+.gallery{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(194px,1fr));margin-top:4px;}
+.shot{border:1px solid var(--line);border-radius:3px;background:var(--white);overflow:hidden;
+  display:flex;flex-direction:column;}
+.shot .img{display:block;width:100%;height:142px;object-fit:cover;background:var(--paper);cursor:zoom-in;border:0;padding:0;}
+.shot .cap{padding:8px;border-top:1px solid var(--line-soft);display:flex;gap:6px;align-items:center;}
+.shot .cap input{flex:1;min-width:0;}
+.shot .meta-l{padding:0 8px 8px;font-size:11px;color:var(--muted);}
+
+.drop{
+  border:1px dashed var(--line);border-radius:3px;padding:22px;text-align:center;
+  background:var(--white);margin-top:4px;
+}
+.drop.over{border-color:var(--gold);background:var(--gold-wash);}
+.drop p{font-size:13.5px;color:var(--muted);margin-top:8px;line-height:1.55;}
+.up-state{margin-top:10px;font-size:13px;color:var(--muted);}
+.up-state.bad{color:#A4231B;font-weight:600;}
+
+.lightbox{
+  position:fixed;inset:0;z-index:200;background:rgba(5,16,40,.9);
+  display:none;align-items:center;justify-content:center;padding:28px;
+}
+.lightbox.on{display:flex;}
+.lightbox img{max-width:100%;max-height:100%;object-fit:contain;}
+.lightbox button{
+  position:absolute;top:18px;right:20px;background:rgba(255,255,255,.14);
+  border:1px solid rgba(255,255,255,.35);color:#fff;border-radius:3px;
+  padding:8px 14px;font-size:14px;
+}
+.lightbox button:hover{background:rgba(255,255,255,.26);}
+
+.proof-open{
+  display:inline-flex;align-items:center;gap:5px;font-size:12.5px;font-weight:600;
+  color:var(--navy);border:1px solid var(--line);border-radius:3px;padding:6px 10px;
+  text-decoration:none;white-space:nowrap;
+}
+.proof-open:hover{border-color:var(--gold);background:var(--gold-wash);}
+.proof-open.off{color:#9AA8BC;border-style:dashed;pointer-events:none;}
+
+@media (max-width:720px){
+  .roomtabs{padding:0 6px;overflow-x:auto;scrollbar-width:none;}
+  .roomtabs::-webkit-scrollbar{display:none;}
+  .roomtabs button{padding:11px 11px;font-size:12.5px;}
+  .gallery{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;}
+  .shot .img{height:108px;}
+}
+
 /* ---------- narrow screens ---------- */
 @media (max-width:1000px){
   .cols{grid-template-columns:1fr;gap:30px;}
@@ -484,7 +546,9 @@ table.ovw .nm{color:var(--muted);font-weight:400;}
       </div>
     </div>
 
-    <div id="stocks-view">
+    <div class="lightbox" id="lightbox"><button id="lb-close">Close</button><img id="lb-img" alt=""></div>
+
+  <div id="stocks-view">
       <div class="wrap">
         <div class="subnav" id="roomnav"></div>
         <div id="stocks-body"></div>
@@ -646,7 +710,7 @@ const YEAR = "2025-26";
 /* Bump this whenever you push. The portal shows it in the top strip, so you
    can tell at a glance whether the version you are looking at is the one you
    just deployed. */
-const BUILD = "build 8";
+const BUILD = "build 9";
 
 /* ===================== nothing below needs editing ====================== */
 
@@ -978,6 +1042,7 @@ const STOCK = {
   loaded:false, loading:false,
   order:[], registers:[], rooms:{},
   room:"overview",
+  tab:"registers",
   dirty:new Set(),
 };
 
@@ -1075,7 +1140,7 @@ function buildRoomNav(){
 function renderOverview(){
   const regs=STOCK.registers;
   const head='<tr><th>Room</th><th>Systems</th><th>Chairs</th>'
-    +'<th>Registers in place</th><th>Last verified</th><th>Last saved</th></tr>';
+    +'<th>Registers in place</th><th>Evidence</th><th>Last verified</th><th>Last saved</th></tr>';
 
   const rows=STOCK.order.map(code=>{
     const r=STOCK.rooms[code]||{};
@@ -1102,6 +1167,10 @@ function renderOverview(){
       + '<td>'+chairTxt+'</td>'
       + '<td><div class="dots">'+dots+'</div>'
       +     '<span class="nm">'+yes+' of '+regs.length+'</span></td>'
+      + '<td>'+( (r.photos||[]).length || (r.proofs||[]).length
+            ? esc((r.photos||[]).length)+' photo'+((r.photos||[]).length===1?'':'s')
+              +' \u00b7 '+esc((r.proofs||[]).length)+' link'+((r.proofs||[]).length===1?'':'s')
+            : '<span class="nm">none</span>')+'</td>'
       + '<td>'+(ver?esc(ver):'<span class="nm">not recorded</span>')+'</td>'
       + '<td><span class="nm">'+saved+'</span></td>'
       + '</tr>';
@@ -1135,6 +1204,7 @@ function renderRoom(code){
   const r=STOCK.rooms[code]||{};
   const m=r.meta||{}, regs=r.registers||{}, ver=r.verification||{};
   const sys=r.systems||[], items=r.items||[];
+  const photos=r.photos||[], proofs=r.proofs||[];
 
   const head='<div class="panel-head">'
     + '<div class="rc">'+esc(code)+'</div>'
@@ -1154,7 +1224,7 @@ function renderRoom(code){
       +'<td>'+txt("registers."+key+".remarks",g.remarks,"Remarks")+'</td></tr>';
   }).join("");
 
-  const regSec='<div class="sec"><h3>Registers</h3>'
+  const regSec='<div class="sec" data-tab="registers"><h3>Registers</h3>'
     +'<p class="note">Whether each register exists, when it was last written in, and anything an auditor should know. A date against "Yes" is what makes it hold up.</p>'
     +'<div class="scroll-x"><table class="rec">'
     +'<tr><th>Register</th><th>Status</th><th>Last entry</th><th>Remarks</th></tr>'
@@ -1166,7 +1236,7 @@ function renderRoom(code){
     +'<td>'+txt("systems."+i+".spec",s.spec,"Processor, RAM, storage, monitor")+'</td>'
     +'<td style="width:34px">'+delBtn("systems",i)+'</td></tr>').join("");
 
-  const sysSec='<div class="sec"><h3>Computer systems</h3>'
+  const sysSec='<div class="sec" data-tab="systems"><h3>Computer systems</h3>'
     +'<p class="note">One line per kind of machine. Keep different specifications on separate lines so the counts stay meaningful.</p>'
     +'<div class="scroll-x"><table class="rec">'
     +'<tr><th>Description</th><th>Count</th><th>Specification</th><th></th></tr>'
@@ -1185,7 +1255,7 @@ function renderRoom(code){
       +'<td style="width:34px">'+delBtn("items",i)+'</td></tr>';
   }).join("");
 
-  const itemSec='<div class="sec"><h3>Furniture and fittings</h3>'
+  const itemSec='<div class="sec" data-tab="furniture"><h3>Furniture and fittings</h3>'
     +'<p class="note">Chairs, tables and fittings. Record what the stock register says and what is actually in the room; the last column works out the difference. Leave a box empty rather than guessing.</p>'
     +'<div class="scroll-x"><table class="rec">'
     +'<tr><th>Item</th><th>As per register</th><th>Present</th><th>Working</th><th>Damaged</th><th>Difference</th><th></th></tr>'
@@ -1193,7 +1263,7 @@ function renderRoom(code){
     +'</table></div>'
     +'<button class="btn-add" data-add="items">Add an item</button></div>';
 
-  const verSec='<div class="sec"><h3>Physical verification</h3>'
+  const verSec='<div class="sec" data-tab="verification"><h3>Physical verification</h3>'
     +'<p class="note">The last time somebody walked the room and counted.</p>'
     +'<div class="meta" style="margin-top:0">'
     + metaField("Verified on","verification.date",ver.date,"e.g. 14 Oct 2026")
@@ -1214,10 +1284,90 @@ function renderRoom(code){
     +'<button class="btn-save" id="save-room">Save changes</button>'
     +'</div>';
 
-  $("#stocks-body").innerHTML='<div class="panel" id="room-panel">'
-    + head + regSec + sysSec + itemSec + verSec + bar + '</div>';
+  /* ---- photographs of the room ---- */
+  const shots = photos.map((ph,i)=>
+      '<figure class="shot">'
+    + '<button class="img" data-zoom="'+esc(ph.url)+'" title="Open full size" style="padding:0;border:0">'
+    + '<img class="img" src="'+esc(ph.url)+'" alt="'+esc(ph.caption||("Photograph of "+code))+'" loading="lazy">'
+    + '</button>'
+    + '<figcaption class="cap">'
+    +   txt("photos."+i+".caption", ph.caption, "What this shows")
+    +   delBtn("photos",i)
+    + '</figcaption>'
+    + (ph.at ? '<div class="meta-l">Added '+esc(new Date(ph.at).toLocaleDateString("en-GB",
+          {day:"numeric",month:"short",year:"numeric"}))+'</div>' : '')
+    + '<input type="hidden" data-path="photos.'+i+'.url" value="'+esc(ph.url)+'">'
+    + '<input type="hidden" data-path="photos.'+i+'.at" value="'+esc(ph.at||"")+'">'
+    + '</figure>').join("");
 
+  const photoSec='<div class="sec" data-tab="photos"><h3>Photographs</h3>'
+    +'<p class="note">Pictures of the room as it stands: the seating, the systems, the stock register itself. Each photograph is shrunk before it is stored, so a phone picture uploads in a second or two.</p>'
+    +'<div class="drop" id="drop">'
+    +  '<button class="btn-save" id="pick-photos" type="button">Choose photographs</button>'
+    +  '<p>or drag them here. JPEG, PNG or WebP.</p>'
+    +  '<input type="file" id="photo-input" accept="image/*" multiple hidden>'
+    +  '<div class="up-state" id="up-state"></div>'
+    +'</div>'
+    + (shots ? '<div class="gallery">'+shots+'</div>'
+             : '<p class="note" style="margin-top:14px">No photographs yet.</p>')
+    +'</div>';
+
+  /* ---- proof links ---- */
+  const proofRows = proofs.map((pr,i)=>{
+    const ok = /^https?:\/\//i.test(pr.url||"");
+    return '<tr><td style="width:26%">'+txt("proofs."+i+".label", pr.label, "What it is")+'</td>'
+      +'<td>'+txt("proofs."+i+".url", pr.url, "https://drive.google.com/...")+'</td>'
+      +'<td>'+txt("proofs."+i+".note", pr.note, "Note")+'</td>'
+      +'<td style="width:86px">'+(ok
+          ? '<a class="proof-open" href="'+esc(pr.url)+'" target="_blank" rel="noopener">Open</a>'
+          : '<span class="proof-open off">Open</span>')+'</td>'
+      +'<td style="width:34px">'+delBtn("proofs",i)+'</td></tr>';
+  }).join("");
+
+  const proofSec='<div class="sec" data-tab="proofs"><h3>Proof links</h3>'
+    +'<p class="note">Google Drive links to the scanned registers, verification reports and anything else an auditor will ask to see. Before pasting a Drive link, open it in Drive and set <strong>Share, General access, Anyone with the link</strong>, or the committee sees a permission error instead of your file.</p>'
+    +'<div class="scroll-x"><table class="rec">'
+    +'<tr><th>What it is</th><th>Link</th><th>Note</th><th></th><th></th></tr>'
+    + (proofRows || '<tr><td colspan="5" style="color:#9AA8BC">No proof links yet.</td></tr>')
+    +'</table></div>'
+    +'<button class="btn-add" data-add="proofs">Add a link</button></div>';
+
+  /* ---- the tab strip ---- */
+  const TABS=[
+    ["registers","Registers", STOCK.registers.filter(([k])=>((regs[k]||{}).status)==="yes").length+"/"+STOCK.registers.length],
+    ["systems","Systems", sys.reduce((t,x)=>t+(Number(x.count)||0),0) || ""],
+    ["furniture","Furniture", items.filter(i=>i.present!=null&&i.present!=="").length || ""],
+    ["photos","Photographs", photos.length || ""],
+    ["proofs","Proof links", proofs.length || ""],
+    ["verification","Verification", ver.date ? "\u2713" : ""],
+  ];
+  if(!TABS.some(t=>t[0]===STOCK.tab)) STOCK.tab="registers";
+  const tabStrip='<div class="roomtabs">'+TABS.map(([k,label,n])=>
+      '<button data-roomtab="'+k+'" aria-current="'+(STOCK.tab===k?"true":"false")+'">'
+    + esc(label) + (n!==""&&n!=null ? '<span class="n">'+esc(n)+'</span>' : '')
+    + '</button>').join("")+'</div>';
+
+  $("#stocks-body").innerHTML='<div class="panel" id="room-panel">'
+    + head + tabStrip
+    + regSec + sysSec + itemSec + photoSec + proofSec + verSec
+    + bar + '</div>';
+
+  showRoomTab(STOCK.tab);
   wireRoom(code);
+}
+
+/* Only the chosen tab is on screen. Every section stays in the page, so
+   anything typed on another tab is still there when you come back. */
+function showRoomTab(key){
+  STOCK.tab=key;
+  const panel=$("#room-panel");
+  if(!panel) return;
+  panel.querySelectorAll(".sec[data-tab]").forEach(sec=>{
+    sec.hidden = sec.dataset.tab !== key;
+  });
+  panel.querySelectorAll("[data-roomtab]").forEach(b=>{
+    b.setAttribute("aria-current", b.dataset.roomtab===key ? "true" : "false");
+  });
 }
 
 /* ---------------- wiring ---------------- */
@@ -1252,22 +1402,71 @@ function wireRoom(code){
       const kind=b.dataset.add;
       const room=STOCK.rooms[code];
       if(!Array.isArray(room[kind])) room[kind]=[];
-      room[kind].push(kind==="systems"
-        ? {label:"",count:null,spec:""}
-        : {name:"",register:null,present:null,working:null,damaged:null});
+      room[kind].push(
+        kind==="systems" ? {label:"",count:null,spec:""} :
+        kind==="proofs"  ? {label:"",url:"",note:""} :
+                           {name:"",register:null,present:null,working:null,damaged:null});
       markDirty(code);
       renderStocks();
     });
   });
 
   panel.querySelectorAll("[data-del]").forEach(b=>{
-    b.addEventListener("click", ()=>{
+    b.addEventListener("click", async ()=>{
       keepEdits();
       const kind=b.dataset.del, i=Number(b.dataset.i);
       const room=STOCK.rooms[code];
-      if(Array.isArray(room[kind])) room[kind].splice(i,1);
+      if(!Array.isArray(room[kind])) return;
+      const gone=room[kind][i];
+      room[kind].splice(i,1);
       markDirty(code);
       renderStocks();
+      // a removed photograph is also removed from storage
+      if(kind==="photos" && gone && gone.url){
+        try{
+          await fetch("/api/photos",{
+            method:"DELETE", credentials:"same-origin",
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify({url:gone.url})
+          });
+        }catch(e){}
+        saveRoom(code);
+      }
+    });
+  });
+
+  /* ---- tabs ---- */
+  panel.querySelectorAll("[data-roomtab]").forEach(b=>{
+    b.addEventListener("click", ()=>showRoomTab(b.dataset.roomtab));
+  });
+
+  /* ---- photographs ---- */
+  const input=$("#photo-input"), drop=$("#drop");
+  if(input){
+    $("#pick-photos").addEventListener("click", ()=>input.click());
+    input.addEventListener("change", ()=>{
+      takePhotos(code, Array.from(input.files||[]));
+      input.value="";
+    });
+  }
+  if(drop){
+    ["dragenter","dragover"].forEach(ev=>drop.addEventListener(ev, e=>{
+      e.preventDefault(); drop.classList.add("over");
+    }));
+    ["dragleave","drop"].forEach(ev=>drop.addEventListener(ev, e=>{
+      e.preventDefault(); drop.classList.remove("over");
+    }));
+    drop.addEventListener("drop", e=>{
+      const files=Array.from((e.dataTransfer&&e.dataTransfer.files)||[])
+        .filter(f=>/^image\//.test(f.type));
+      if(files.length) takePhotos(code, files);
+    });
+  }
+
+  panel.querySelectorAll("[data-zoom]").forEach(b=>{
+    b.addEventListener("click", ()=>{
+      $("#lb-img").src=b.dataset.zoom;
+      $("#lightbox").classList.add("on");
     });
   });
 
@@ -1319,6 +1518,8 @@ async function saveRoom(code){
   delete data._updated_at; delete data._updated_by;
   data.systems=(data.systems||[]).filter(s=>(s.label||"").trim()||s.count!=null);
   data.items=(data.items||[]).filter(i=>(i.name||"").trim());
+  data.proofs=(data.proofs||[]).filter(p=>(p.label||"").trim()||(p.url||"").trim());
+  data.photos=(data.photos||[]).filter(p=>/^https?:\/\//i.test(p.url||""));
 
   btn.disabled=true; btn.textContent="Saving";
   note.className="saved"; note.textContent="Saving changes";
@@ -1344,6 +1545,87 @@ async function saveRoom(code){
   }
   btn.disabled=false; btn.textContent="Save changes";
 }
+
+/* ---- photographs: shrink in the browser, then upload ----
+   A phone picture is several megabytes and far larger than anything the
+   gallery needs. Drawing it onto a canvas at 1600px and re-encoding as JPEG
+   brings it down to a few hundred kilobytes, which uploads quickly on
+   college wifi and keeps the page fast to open. */
+const PHOTO_MAX = 1600;
+const PHOTO_QUALITY = 0.82;
+
+function shrink(file){
+  return new Promise((resolve,reject)=>{
+    const url=URL.createObjectURL(file);
+    const img=new Image();
+    img.onload=()=>{
+      URL.revokeObjectURL(url);
+      let {width:w,height:h}=img;
+      const scale=Math.min(1, PHOTO_MAX/Math.max(w,h));
+      w=Math.round(w*scale); h=Math.round(h*scale);
+      const c=document.createElement("canvas");
+      c.width=w; c.height=h;
+      const ctx=c.getContext("2d");
+      ctx.fillStyle="#fff"; ctx.fillRect(0,0,w,h);   // PNGs with transparency
+      ctx.drawImage(img,0,0,w,h);
+      try{ resolve(c.toDataURL("image/jpeg", PHOTO_QUALITY)); }
+      catch(e){ reject(new Error("That image could not be read.")); }
+    };
+    img.onerror=()=>{ URL.revokeObjectURL(url); reject(new Error("That file is not an image.")); };
+    img.src=url;
+  });
+}
+
+async function takePhotos(code, files){
+  if(!files.length) return;
+  const state=$("#up-state");
+  const room=STOCK.rooms[code];
+  if(!Array.isArray(room.photos)) room.photos=[];
+  keepEdits();
+
+  let done=0, failed=0;
+  for(const file of files){
+    if(state){ state.className="up-state"; state.textContent=
+      "Uploading "+(done+failed+1)+" of "+files.length+"\u2026"; }
+    try{
+      const dataUrl=await shrink(file);
+      const r=await fetch("/api/photos",{
+        method:"POST", credentials:"same-origin",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({code, name:file.name, dataUrl})
+      });
+      const d=await r.json().catch(()=>({}));
+      if(r.status===401) throw new Error("Your session has expired. Sign out and sign in again.");
+      if(!r.ok || !d.ok) throw new Error(d.error || "The photograph could not be stored.");
+      room.photos.push({url:d.url, caption:"", at:d.at});
+      done++;
+    }catch(e){
+      failed++;
+      if(state){ state.className="up-state bad"; state.textContent=String(e.message||e); }
+    }
+  }
+
+  markDirty(code);
+  STOCK.tab="photos";
+  renderStocks();
+  const s2=$("#up-state");
+  if(s2 && !failed){
+    s2.className="up-state";
+    s2.textContent=done+(done===1?" photograph added.":" photographs added.");
+  }
+  if(done) saveRoom(code);   // a photograph should not be lost by forgetting to save
+}
+
+$("#lb-close").addEventListener("click", ()=>$("#lightbox").classList.remove("on"));
+$("#lightbox").addEventListener("click", e=>{
+  if(e.target.id!=="lb-img") $("#lightbox").classList.remove("on");
+});
+document.addEventListener("keydown", e=>{
+  if(e.key==="Escape" && $("#lightbox").classList.contains("on")){
+    e.stopPropagation();
+    $("#lightbox").classList.remove("on");
+  }
+}, true);
 
 function renderStocks(){
   buildRoomNav();

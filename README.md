@@ -14,7 +14,8 @@ ca-portal/
 │   ├── login.js        checks the department password, starts a session
 │   ├── _session.js     signs and verifies the session cookie
 │   ├── _rooms.js       the rooms, and their starting data from the DDH deck
-│   └── stocks.js       reads and saves the stock records
+│   ├── stocks.js       reads and saves the stock records
+│   └── photos.js       stores and removes room photographs
 ├── package.json
 ├── vercel.json
 └── README.md
@@ -61,6 +62,7 @@ Two, both under **Settings → Environment Variables** in Vercel:
 |---|---|
 | `PORTAL_PASSWORD` | the department password |
 | `DATABASE_URL` | the Neon connection string the Stocks page saves into |
+| `BLOB_READ_WRITE_TOKEN` | added automatically when you create a Blob store, for room photographs |
 
 To change the password, edit that value, then go to **Deployments**, open the
 **⋯** menu on the newest one and choose **Redeploy** — it only takes effect
@@ -81,6 +83,18 @@ The Stocks page is the only part that stores anything. It needs a Neon database.
 
 Until `DATABASE_URL` is set, every other tab works as before and the Stocks tab
 says the records could not be loaded.
+
+### Setting up photograph storage, once
+
+Room photographs need a Vercel Blob store. Same shape as the database:
+
+1. Vercel, this project, **Storage**, **Create Database**, choose **Blob**
+2. Name it anything, create it, and connect it to this project
+3. Vercel adds `BLOB_READ_WRITE_TOKEN` by itself, so there is no prefix box
+   to get wrong this time
+4. Redeploy
+
+Everything else keeps working without it; only the Photographs tab needs it.
 
 ---
 
@@ -141,12 +155,27 @@ band or from its tile under Planning and records.
 registers, and when the room was last verified and last saved. It is the view to
 put in front of a DDH or NBA reviewer.
 
-**Each room** has four sections. *Registers* — whether each of the seven exists,
+**Each room** has six tabs across the top: Registers, Systems, Furniture,
+Photographs, Proof links and Verification. The number beside a tab tells you
+what is in it without opening it. Anything typed on one tab stays put while you
+look at another. *Registers* — whether each of the seven exists,
 when it was last written in, and remarks. *Computer systems* — one line per kind
 of machine. *Furniture and fittings* — per item, what the stock register says,
 what is physically present, how many work and how many are damaged, with the
 difference worked out for you. *Physical verification* — when the room was last
 counted, and by whom.
+
+*Photographs* — pictures of the room. Choose them or drag them in; on a phone
+this offers the camera. Each one is shrunk to 1600px in the browser before it
+is sent, so a 4MB phone picture arrives as a few hundred kilobytes, uploads in
+a second and the gallery stays quick. Click a thumbnail to see it full size.
+A photograph saves the room as soon as it uploads, so it cannot be lost by
+forgetting to press Save, and removing one deletes it from storage too.
+
+*Proof links* — Google Drive links to the scanned registers and reports, each
+with a label and a note, and an Open button beside it. Set the Drive file to
+**Share, General access, Anyone with the link** first, or the committee sees a
+permission error instead of your file.
 
 Anything typed is kept while you move between rooms, and a dot stays on a room
 button until you save it. The name in the save bar is recorded against the entry

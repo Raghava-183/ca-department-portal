@@ -55,6 +55,8 @@ const aftfLab = name => ({
       spec: 'Lenovo Core i5 8th Gen / DDR4 16 GB / 480 GB SSD / 18.5" LG monitor' },
   ],
   items: LAB_ITEMS.map(i => ({ ...i })),
+  photos: [],
+  proofs: [],
   verification: { date: '', by: '' },
 });
 
@@ -72,6 +74,8 @@ const SEED = {
     },
     systems: [],
     items: STAFF_ITEMS.map(i => ({ ...i })),
+    photos: [],
+    proofs: [],
     verification: { date: '', by: '' },
   },
 
@@ -97,6 +101,8 @@ const SEED = {
         spec: 'Lenovo Core i7 14th Gen / GDDR6 128 GB / 1 TB SSD / 8 GB graphics card / 21.5" DELL monitor' },
     ],
     items: LAB_ITEMS.map(i => ({ ...i })),
+    photos: [],
+    proofs: [],
     verification: { date: '', by: '' },
   },
 };
